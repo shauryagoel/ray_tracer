@@ -23,3 +23,40 @@ impl Tuple {
         self.w == 1.0
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn point_validity() {
+        let a = Tuple {
+            x: 4.3,
+            y: -4.2,
+            z: 3.1,
+            w: 1.0,
+        };
+        assert_eq!(a.x, 4.3);
+        assert_eq!(a.y, -4.2);
+        assert_eq!(a.z, 3.1);
+        assert_eq!(a.w, 1.0);
+        assert!(a.is_point());
+        assert!(!a.is_vector());
+    }
+
+    #[test]
+    fn vector_validity() {
+        let a = Tuple {
+            x: 4.3,
+            y: -4.2,
+            z: 3.1,
+            w: 0.0,
+        };
+        assert_eq!(a.x, 4.3);
+        assert_eq!(a.y, -4.2);
+        assert_eq!(a.z, 3.1);
+        assert_eq!(a.w, 0.0);
+        assert!(!a.is_point());
+        assert!(a.is_vector());
+    }
+}
