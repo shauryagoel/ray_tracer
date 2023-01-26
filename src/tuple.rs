@@ -39,6 +39,12 @@ impl Tuple {
     }
 }
 
+impl PartialEq for Tuple {
+    fn eq(&self, other: &Tuple) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -69,13 +75,13 @@ mod tests {
     fn point_factory() {
         let p = point(4.0, -4.0, 3.0);
         let _p = Tuple::new(4.0, -4.0, 3.0, 1.0);
-        assert!(p.is_point()); // TODO: compare p and _p
+        assert!(p == _p);
     }
 
     #[test]
     fn vector_factory() {
         let p = vector(4.0, -4.0, 3.0);
         let _p = Tuple::new(4.0, -4.0, 3.0, 0.0);
-        assert!(p.is_vector()); // TODO: compare p and _p
+        assert!(p == _p);
     }
 }
