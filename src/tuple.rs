@@ -28,6 +28,11 @@ impl Tuple {
     pub fn is_point(&self) -> bool {
         self.w == 1.0
     }
+
+    // Pythagoras theorem
+    pub fn magnitude(&self) -> f32 {
+        (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+    }
 }
 
 impl PartialEq for Tuple {
@@ -192,5 +197,35 @@ mod tests {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(0.5, -1.0, 1.5, -2.0);
         assert!(a / 2.0 == _a);
+    }
+
+    #[test]
+    fn vector_magnitude1() {
+        let v = vector(1.0, 0.0, 0.0);
+        assert_eq!(v.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn vector_magnitude2() {
+        let v = vector(0.0, 1.0, 0.0);
+        assert_eq!(v.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn vector_magnitude3() {
+        let v = vector(0.0, 0.0, 1.0);
+        assert_eq!(v.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn vector_magnitude4() {
+        let v = vector(1.0, 2.0, 3.0);
+        assert_eq!(v.magnitude(), f32::sqrt(14.0));
+    }
+
+    #[test]
+    fn vector_magnitude5() {
+        let v = vector(-1.0, -2.0, -3.0);
+        assert_eq!(v.magnitude(), f32::sqrt(14.0));
     }
 }
