@@ -70,6 +70,22 @@ impl std::ops::Neg for Tuple {
     }
 }
 
+impl std::ops::Mul<f32> for Tuple {
+    type Output = Tuple;
+
+    fn mul(self, a: f32) -> Tuple {
+        Tuple::new(self.x * a, self.y * a, self.z * a, self.w * a)
+    }
+}
+
+impl std::ops::Div<f32> for Tuple {
+    type Output = Tuple;
+
+    fn div(self, a: f32) -> Tuple {
+        Tuple::new(self.x / a, self.y / a, self.z / a, self.w / a)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -155,5 +171,26 @@ mod tests {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(-1.0, 2.0, -3.0, 4.0);
         assert!(-a == _a);
+    }
+
+    #[test]
+    fn scaling_tuple() {
+        let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+        let _a = Tuple::new(3.5, -7.0, 10.5, -14.0);
+        assert!(a * 3.5 == _a);
+    }
+
+    #[test]
+    fn fraction_scaling_tuple() {
+        let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+        let _a = Tuple::new(0.5, -1.0, 1.5, -2.0);
+        assert!(a * 0.5 == _a);
+    }
+
+    #[test]
+    fn dividing_tuple() {
+        let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+        let _a = Tuple::new(0.5, -1.0, 1.5, -2.0);
+        assert!(a / 2.0 == _a);
     }
 }
