@@ -117,4 +117,28 @@ mod tests {
         let _p = vector(-2.0, -4.0, -6.0);
         assert!(p1 - p2 == _p);
     }
+
+    #[test]
+    fn point_vector_backward() {
+        let p = point(3.0, 2.0, 1.0);
+        let v = vector(5.0, 6.0, 7.0);
+        let _a = point(-2.0, -4.0, -6.0);
+        assert!(p - v == _a);
+    }
+
+    #[test]
+    fn vector_subtraction() {
+        let p1 = vector(3.0, 2.0, 1.0);
+        let p2 = vector(5.0, 6.0, 7.0);
+        let _p = vector(-2.0, -4.0, -6.0);
+        assert!(p1 - p2 == _p);
+    }
+
+    #[test]
+    fn reverse_vector() {
+        let zero = vector(0.0, 0.0, 0.0);
+        let v = vector(1.0, -2.0, 3.0);
+        let _v = vector(-1.0, 2.0, -3.0);
+        assert!(zero - v == _v);
+    }
 }
