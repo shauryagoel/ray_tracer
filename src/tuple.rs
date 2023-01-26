@@ -21,15 +21,6 @@ impl Tuple {
         Tuple { x, y, z, w }
     }
 
-    pub fn add(&self, other: &Tuple) -> Tuple {
-        Tuple::new(
-            self.x + other.x,
-            self.y + other.y,
-            self.z + other.z,
-            self.w + other.w,
-        )
-    }
-
     pub fn is_vector(&self) -> bool {
         self.w == 0.0
     }
@@ -42,6 +33,19 @@ impl Tuple {
 impl PartialEq for Tuple {
     fn eq(&self, other: &Tuple) -> bool {
         self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
+impl std::ops::Add for Tuple {
+    type Output = Tuple;
+
+    fn add(self, other: Tuple) -> Tuple {
+        Tuple::new(
+            self.x + other.x,
+            self.y + other.y,
+            self.z + other.z,
+            self.w + other.w,
+        )
     }
 }
 
@@ -83,5 +87,13 @@ mod tests {
         let p = vector(4.0, -4.0, 3.0);
         let _p = Tuple::new(4.0, -4.0, 3.0, 0.0);
         assert!(p == _p);
+    }
+
+    #[test]
+    fn tuple_addition() {
+        let a1 = Tuple::new(3.0, -2.0, 5.0, 1.0);
+        let a2 = Tuple::new(-2.0, 3.0, 1.0, 0.0);
+        let _a = Tuple::new(1.0, 1.0, 6.0, 1.0);
+        assert!(a1 + a2 == _a)
     }
 }
