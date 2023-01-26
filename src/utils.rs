@@ -2,8 +2,19 @@
 
 const EPSILON: f32 = 1e-5;
 
-pub fn float_compare(a: f32, b: f32) -> bool {
-    (a - b).abs() < EPSILON
+trait PartialEq {
+    fn eq(&self, other: &f32) -> bool;
+    fn ne(&self, other: &f32) -> bool;
+}
+
+impl PartialEq for f32 {
+    fn eq(&self, other: &f32) -> bool {
+        (self - other).abs() < EPSILON
+    }
+
+    fn ne(&self, other: &f32) -> bool {
+        (self - other).abs() >= EPSILON
+    }
 }
 
 #[cfg(test)]
@@ -12,11 +23,11 @@ mod tests {
 
     #[test]
     fn float_compare_equal() {
-        assert!(float_compare(3.3, 3.3));
+        assert!(3.3 == 3.3);
     }
 
     #[test]
     fn float_compare_not_equal() {
-        assert!(!float_compare(3.3, 3.2));
+        assert!(3.3 != 3.2);
     }
 }
