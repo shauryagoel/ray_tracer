@@ -1,3 +1,5 @@
+use crate::utils;
+
 pub struct Tuple {
     pub x: f32, // x coordinate of the Tuple
     pub y: f32, // y coordinate of the Tuple
