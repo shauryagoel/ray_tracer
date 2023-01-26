@@ -49,6 +49,19 @@ impl std::ops::Add for Tuple {
     }
 }
 
+impl std::ops::Sub for Tuple {
+    type Output = Tuple;
+
+    fn sub(self, other: Tuple) -> Tuple {
+        Tuple::new(
+            self.x - other.x,
+            self.y - other.y,
+            self.z - other.z,
+            self.w - other.w,
+        )
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -95,5 +108,13 @@ mod tests {
         let a2 = Tuple::new(-2.0, 3.0, 1.0, 0.0);
         let _a = Tuple::new(1.0, 1.0, 6.0, 1.0);
         assert!(a1 + a2 == _a)
+    }
+
+    #[test]
+    fn point_subtraction() {
+        let p1 = point(3.0, 2.0, 1.0);
+        let p2 = point(5.0, 6.0, 7.0);
+        let _p = vector(-2.0, -4.0, -6.0);
+        assert!(p1 - p2 == _p);
     }
 }
