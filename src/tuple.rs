@@ -62,6 +62,14 @@ impl std::ops::Sub for Tuple {
     }
 }
 
+impl std::ops::Neg for Tuple {
+    type Output = Tuple;
+
+    fn neg(self) -> Tuple {
+        Tuple::new(-self.x, -self.y, -self.z, -self.w)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -140,5 +148,12 @@ mod tests {
         let v = vector(1.0, -2.0, 3.0);
         let _v = vector(-1.0, 2.0, -3.0);
         assert!(zero - v == _v);
+    }
+
+    #[test]
+    fn negation() {
+        let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
+        let _a = Tuple::new(-1.0, 2.0, -3.0, 4.0);
+        assert!(-a == _a);
     }
 }
