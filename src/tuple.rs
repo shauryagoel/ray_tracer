@@ -1,4 +1,4 @@
-use crate::utils;
+use crate::utils::Compare;
 
 pub struct Tuple {
     pub x: f32, // x coordinate of the Tuple
@@ -37,7 +37,7 @@ impl Tuple {
 
 impl PartialEq for Tuple {
     fn eq(&self, other: &Tuple) -> bool {
-        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+        self.x.eq(other.x) && self.y.eq(other.y) && self.z.eq(other.z) && self.w.eq(other.w)
     }
 }
 
