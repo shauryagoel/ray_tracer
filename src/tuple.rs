@@ -1,5 +1,6 @@
 use crate::utils::Compare;
 
+#[derive(Clone, Copy)]
 pub struct Tuple {
     pub x: f32, // x coordinate of the Tuple
     pub y: f32, // y coordinate of the Tuple
@@ -32,6 +33,11 @@ impl Tuple {
     // Pythagoras theorem
     pub fn magnitude(&self) -> f32 {
         (self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w).sqrt()
+    }
+
+    // We get a unit vector after normalization
+    pub fn normalize(&self) -> Tuple {
+        *self / self.magnitude()
     }
 }
 
@@ -227,5 +233,26 @@ mod tests {
     fn vector_magnitude5() {
         let v = vector(-1.0, -2.0, -3.0);
         assert_eq!(v.magnitude(), f32::sqrt(14.0));
+    }
+
+    #[test]
+    fn vector_normalize1() {
+        let v = vector(4.0, 0.0, 0.0);
+        let _v = vector(1.0, 0.0, 0.0);
+        assert!(v.normalize() == _v);
+    }
+
+    #[test]
+    fn vector_normalize2() {
+        let v = vector(1.0, 2.0, 3.0);
+        let _v = vector(0.26726, 0.53452, 0.80178);
+        assert!(v.normalize() == _v);
+    }
+
+    #[test]
+    fn magnitude_of_normalized_vector() {
+        let v = vector(1.0, 2.0, 3.0);
+        let mag = v.normalize().magnitude();
+        assert!(mag.eq(1.0));
     }
 }
