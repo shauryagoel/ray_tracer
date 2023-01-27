@@ -2,12 +2,12 @@
 
 const EPSILON: f32 = 1.0e-5;
 
-trait PartialEq {
+pub trait Compare {
     fn eq(self, other: f32) -> bool;
     fn neq(self, other: f32) -> bool;
 }
 
-impl PartialEq for f32 {
+impl Compare for f32 {
     fn eq(self, other: f32) -> bool {
         (self - other).abs() < EPSILON
     }
