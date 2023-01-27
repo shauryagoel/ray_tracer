@@ -39,6 +39,21 @@ impl Tuple {
     pub fn normalize(&self) -> Tuple {
         *self / self.magnitude()
     }
+
+    // Dot product of 2 vectors
+    pub fn dot(&self, other: &Tuple) -> f32 {
+        self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
+    }
+
+    // Cross product of 2 vectors
+    pub fn cross(&self, other: &Tuple) -> Tuple {
+        Tuple::new(
+            self.y * other.z - self.z * other.y,
+            self.z * other.x - self.x * other.z,
+            self.x * other.y - self.y * other.x,
+            0.0, // It still is a vector
+        )
+    }
 }
 
 impl PartialEq for Tuple {
@@ -254,5 +269,22 @@ mod tests {
         let v = vector(1.0, 2.0, 3.0);
         let mag = v.normalize().magnitude();
         assert!(mag.eq(1.0));
+    }
+
+    #[test]
+    fn dot_vectors() {
+        let a = vector(1.0, 2.0, 3.0);
+        let b = vector(2.0, 3.0, 4.0);
+        let dot_product = a.dot(&b);
+        assert!(dot_product.eq(20.0));
+    }
+
+    #[test]
+    fn cross_vectors() {
+        let a = vector(1.0, 2.0, 3.0);
+        let b = vector(2.0, 3.0, 4.0);
+        let _v = vector(-1.0, 2.0, -1.0);
+        assert!(a.cross(&b) == _v);
+        assert!(b.cross(&a) == -_v);
     }
 }
