@@ -4,3 +4,4 @@ mod utils;
 
 pub use projectile::{Environment, Projectile};
 pub use tuple::{point, vector, Tuple};
+pub use utils::Compare;
