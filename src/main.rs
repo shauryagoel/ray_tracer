@@ -1,8 +1,4 @@
-mod projectile;
-mod tuple;
-mod utils;
-use projectile::{Environment, Projectile};
-use tuple::{point, vector, Tuple};
+use ray_tracer::{point, vector, Environment, Projectile, Tuple};
 
 fn main() {
     let data1 = Tuple::new(1.0, 2.0, 3.0, 0.0);
