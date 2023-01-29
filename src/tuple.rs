@@ -1,4 +1,4 @@
-use crate::utils::Compare;
+use crate::Compare;
 
 #[derive(Clone, Copy)]
 pub struct Tuple {
