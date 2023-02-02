@@ -4,6 +4,7 @@ use crate::Compare;
 // All the components should be between 0 and 1
 // No such constraint has been added because during processing of algorithms, color value can be <0 or >1,
 // if we clip at every stage, then the final image would be too dark or too light
+#[derive(Clone, Copy)]
 pub struct Color {
     pub red: f32,   // red component of the color
     pub green: f32, // green component of the color
