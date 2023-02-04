@@ -15,6 +15,14 @@ impl Canvas {
             data: vec![Color::black(); width * height],
         }
     }
+
+    pub fn write_pixel(&mut self, col: usize, row: usize, color: Color) {
+        self[row][col] = color;
+    }
+
+    pub fn pixel_at(&self, col: usize, row: usize) -> Color {
+        self[row][col]
+    }
 }
 
 impl std::ops::Index<usize> for Canvas {
@@ -44,7 +52,7 @@ mod canvas_tests {
         assert_eq!(c.height, 20);
         for i in 1..c.height {
             for j in 1..c.width {
-                assert!(c[i][j] == black_color);
+                assert!(c.pixel_at(j, i) == black_color);
             }
         }
     }
@@ -52,8 +60,8 @@ mod canvas_tests {
     #[test]
     fn writing_a_pixel_in_canvas() {
         let mut c = Canvas::new(10, 20);
-        let red_color = Color::new(1.0, 0.0, 0.0);
-        c[3][2] = red_color; // As it is more easier to do row,column indexing
-        assert!(c[3][2] == red_color);
+        let red = Color::new(1.0, 0.0, 0.0);
+        c.write_pixel(2, 3, red);
+        assert!(c.pixel_at(2, 3) == red);
     }
 }
