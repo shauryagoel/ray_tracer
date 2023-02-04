@@ -1,3 +1,6 @@
+use crate::Compare;
+use crate::Tuple;
+
 const MATRIX_SIZE: usize = 4;
 
 #[derive(Default)]
@@ -24,6 +27,60 @@ impl std::ops::Index<usize> for Matrix {
 impl std::ops::IndexMut<usize> for Matrix {
     fn index_mut(&mut self, row: usize) -> &mut Self::Output {
         &mut self.data[row]
+    }
+}
+
+impl PartialEq for Matrix {
+    fn eq(&self, other: &Self) -> bool {
+        for row in 0..MATRIX_SIZE {
+            for col in 0..MATRIX_SIZE {
+                if self.data[row][col].neq(other[row][col]) {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+}
+
+impl std::ops::Mul<Matrix> for Matrix {
+    type Output = Self;
+
+    fn mul(self, other: Self) -> Self {
+        let mut result = Matrix::new();
+        for i in 0..MATRIX_SIZE {
+            for j in 0..MATRIX_SIZE {
+                for k in 0..MATRIX_SIZE {
+                    result[i][j] += self[i][k] * other[k][j];
+                }
+            }
+        }
+        result
+    }
+}
+
+impl std::ops::Mul<Tuple> for Matrix {
+    type Output = Tuple;
+
+    fn mul(self, other: Tuple) -> Self::Output {
+        Tuple::new(
+            self[0][0] * other.x
+                + self[0][1] * other.y
+                + self[0][2] * other.z
+                + self[0][3] * other.w,
+            self[1][0] * other.x
+                + self[1][1] * other.y
+                + self[1][2] * other.z
+                + self[1][3] * other.w,
+            self[2][0] * other.x
+                + self[2][1] * other.y
+                + self[2][2] * other.z
+                + self[2][3] * other.w,
+            self[3][0] * other.x
+                + self[3][1] * other.y
+                + self[3][2] * other.z
+                + self[3][3] * other.w,
+        )
     }
 }
 
@@ -61,5 +118,196 @@ mod matrix_tests {
         assert_eq!(m[2][2], 11.0);
         assert_eq!(m[3][0], 13.5);
         assert_eq!(m[3][2], 15.5);
+    }
+
+    #[test]
+    fn matrix_compare1() {
+        let mut m1 = Matrix::new();
+        m1[0][0] = 1.0;
+        m1[0][1] = 2.0;
+        m1[0][2] = 3.0;
+        m1[0][3] = 4.0;
+
+        m1[1][0] = 5.0;
+        m1[1][1] = 6.0;
+        m1[1][2] = 7.0;
+        m1[1][3] = 8.0;
+
+        m1[2][0] = 9.0;
+        m1[2][1] = 8.0;
+        m1[2][2] = 7.0;
+        m1[2][3] = 6.0;
+
+        m1[3][0] = 5.0;
+        m1[3][1] = 4.0;
+        m1[3][2] = 3.0;
+        m1[3][3] = 2.0;
+
+        let mut m2 = Matrix::new();
+        m2[0][0] = 1.0;
+        m2[0][1] = 2.0;
+        m2[0][2] = 3.0;
+        m2[0][3] = 4.0;
+
+        m2[1][0] = 5.0;
+        m2[1][1] = 6.0;
+        m2[1][2] = 7.0;
+        m2[1][3] = 8.0;
+
+        m2[2][0] = 9.0;
+        m2[2][1] = 8.0;
+        m2[2][2] = 7.0;
+        m2[2][3] = 6.0;
+
+        m2[3][0] = 5.0;
+        m2[3][1] = 4.0;
+        m2[3][2] = 3.0;
+        m2[3][3] = 2.0;
+
+        assert!(m1 == m2);
+    }
+
+    #[test]
+    fn matrix_compare2() {
+        let mut m1 = Matrix::new();
+        m1[0][0] = 1.0;
+        m1[0][1] = 2.0;
+        m1[0][2] = 3.0;
+        m1[0][3] = 4.0;
+
+        m1[1][0] = 5.0;
+        m1[1][1] = 6.0;
+        m1[1][2] = 7.0;
+        m1[1][3] = 8.0;
+
+        m1[2][0] = 9.0;
+        m1[2][1] = 8.0;
+        m1[2][2] = 7.0;
+        m1[2][3] = 6.0;
+
+        m1[3][0] = 5.0;
+        m1[3][1] = 4.0;
+        m1[3][2] = 3.0;
+        m1[3][3] = 2.0;
+
+        let mut m2 = Matrix::new();
+        m2[0][0] = 2.0;
+        m2[0][1] = 3.0;
+        m2[0][2] = 4.0;
+        m2[0][3] = 5.0;
+
+        m2[1][0] = 6.0;
+        m2[1][1] = 7.0;
+        m2[1][2] = 8.0;
+        m2[1][3] = 9.0;
+
+        m2[2][0] = 8.0;
+        m2[2][1] = 7.0;
+        m2[2][2] = 6.0;
+        m2[2][3] = 5.0;
+
+        m2[3][0] = 4.0;
+        m2[3][1] = 3.0;
+        m2[3][2] = 2.0;
+        m2[3][3] = 1.0;
+
+        assert!(m1 != m2);
+    }
+
+    #[test]
+    fn matrix_multiplication() {
+        let mut m1 = Matrix::new();
+        m1[0][0] = 1.0;
+        m1[0][1] = 2.0;
+        m1[0][2] = 3.0;
+        m1[0][3] = 4.0;
+
+        m1[1][0] = 5.0;
+        m1[1][1] = 6.0;
+        m1[1][2] = 7.0;
+        m1[1][3] = 8.0;
+
+        m1[2][0] = 9.0;
+        m1[2][1] = 8.0;
+        m1[2][2] = 7.0;
+        m1[2][3] = 6.0;
+
+        m1[3][0] = 5.0;
+        m1[3][1] = 4.0;
+        m1[3][2] = 3.0;
+        m1[3][3] = 2.0;
+
+        let mut m2 = Matrix::new();
+        m2[0][0] = -2.0;
+        m2[0][1] = 1.0;
+        m2[0][2] = 2.0;
+        m2[0][3] = 3.0;
+
+        m2[1][0] = 3.0;
+        m2[1][1] = 2.0;
+        m2[1][2] = 1.0;
+        m2[1][3] = -1.0;
+
+        m2[2][0] = 4.0;
+        m2[2][1] = 3.0;
+        m2[2][2] = 6.0;
+        m2[2][3] = 5.0;
+
+        m2[3][0] = 1.0;
+        m2[3][1] = 2.0;
+        m2[3][2] = 7.0;
+        m2[3][3] = 8.0;
+
+        let mut m3 = Matrix::new();
+        m3[0][0] = 20.0;
+        m3[0][1] = 22.0;
+        m3[0][2] = 50.0;
+        m3[0][3] = 48.0;
+
+        m3[1][0] = 44.0;
+        m3[1][1] = 54.0;
+        m3[1][2] = 114.0;
+        m3[1][3] = 108.0;
+
+        m3[2][0] = 40.0;
+        m3[2][1] = 58.0;
+        m3[2][2] = 110.0;
+        m3[2][3] = 102.0;
+
+        m3[3][0] = 16.0;
+        m3[3][1] = 26.0;
+        m3[3][2] = 46.0;
+        m3[3][3] = 42.0;
+
+        assert!(m1 * m2 == m3);
+    }
+
+    #[test]
+    fn matrix_multiplication_with_tuple() {
+        let mut a = Matrix::new();
+        a[0][0] = 1.0;
+        a[0][1] = 2.0;
+        a[0][2] = 3.0;
+        a[0][3] = 4.0;
+
+        a[1][0] = 2.0;
+        a[1][1] = 4.0;
+        a[1][2] = 4.0;
+        a[1][3] = 2.0;
+
+        a[2][0] = 8.0;
+        a[2][1] = 6.0;
+        a[2][2] = 4.0;
+        a[2][3] = 1.0;
+
+        a[3][0] = 0.0;
+        a[3][1] = 0.0;
+        a[3][2] = 0.0;
+        a[3][3] = 1.0;
+
+        let b = Tuple::new(1.0, 2.0, 3.0, 1.0);
+        let result = Tuple::new(18.0, 24.0, 33.0, 1.0);
+
+        assert!(a * b == result);
     }
 }
