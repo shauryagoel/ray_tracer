@@ -8,9 +8,7 @@ pub struct Matrix {
 impl Matrix {
     // Initialize a new matrix with 0's
     pub fn new() -> Matrix {
-        Matrix {
-            data: [[0.0; MATRIX_SIZE]; MATRIX_SIZE],
-        }
+        Self::default()
     }
 }
 
