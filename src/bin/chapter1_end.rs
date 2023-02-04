@@ -27,8 +27,5 @@ fn main() {
         environment.projectile = environment.tick();
         number_of_tick_to_hit_ground += 1;
     }
-    println!(
-        "Number of ticks to hit the ground: {}",
-        number_of_tick_to_hit_ground
-    );
+    println!("Number of ticks to hit the ground: {number_of_tick_to_hit_ground}");
 }
