@@ -16,6 +16,11 @@ impl Canvas {
         }
     }
 
+    // Fills the canvas with a new color
+    pub fn fill(&mut self, color: Color) {
+        self.data = vec![color; self.width * self.height];
+    }
+
     pub fn write_pixel(&mut self, col: usize, row: usize, color: Color) {
         self[row][col] = color;
     }
@@ -44,21 +49,35 @@ impl Canvas {
     fn get_ppm_pixel_values(&self) -> String {
         let mut pixels: String = String::from("");
         for row in 0..self.height {
+            let mut pixels_row: String = String::from("");
+
             for col in 0..self.width {
                 let _color = self.pixel_at(col, row);
-                // scale pixel value between 0 and 255
-                let red_value = (_color.red * 255_f32).clamp(0.0, 255.0).round() as u8;
-                let green_value = (_color.green * 255_f32).clamp(0.0, 255.0).round() as u8;
-                let blue_value = (_color.blue * 255_f32).clamp(0.0, 255.0).round() as u8;
-                pixels += &(red_value.to_string() + " ");
-                pixels += &(green_value.to_string() + " ");
-                pixels += &(blue_value.to_string() + " ");
+
+                for pixel_value in [_color.red, _color.green, _color.blue] {
+                    let pixel_value_string = self.scale_color_to_string(pixel_value);
+
+                    // Ensure that each row is at max 70 characters long
+                    if pixels_row.len() + pixel_value_string.len() > 69 {
+                        pixels_row.pop();
+                        pixels_row += "\n";
+                        pixels += &pixels_row;
+                        pixels_row.clear();
+                    }
+                    pixels_row += &(pixel_value_string + " ");
+                }
             }
+            pixels += &pixels_row;
             // pixels = pixels.trim_end().to_string();
             pixels.pop(); // above might be slow as it creates a new string
             pixels += "\n";
         }
         pixels
+    }
+
+    // Scales the color value and clip between 0 and 255 and convert to string
+    fn scale_color_to_string(&self, color_value: f32) -> String {
+        ((color_value * 255_f32).clamp(0.0, 255.0).round() as u8).to_string()
     }
 }
 
@@ -123,10 +142,43 @@ mod canvas_tests {
         c.write_pixel(4, 2, c3);
 
         let ppm = c.get_ppm();
+        println!("{}", ppm);
         // Skips the header as we want to compare pixel data
         let mut ppm_iter = ppm.split("\n").skip(3);
         assert_eq!("255 0 0 0 0 0 0 0 0 0 0 0 0 0 0", ppm_iter.next().unwrap());
         assert_eq!("0 0 0 0 0 0 0 128 0 0 0 0 0 0 0", ppm_iter.next().unwrap());
         assert_eq!("0 0 0 0 0 0 0 0 0 0 0 0 0 0 255", ppm_iter.next().unwrap());
+    }
+
+    #[test]
+    fn ppm_row_length_check() {
+        let mut c = Canvas::new(10, 2);
+        c.fill(Color::new(1.0, 0.8, 0.6));
+        let ppm = c.get_ppm();
+        let mut ppm_iter = ppm.split("\n").skip(3);
+
+        assert_eq!(
+            "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
+            ppm_iter.next().unwrap()
+        );
+        assert_eq!(
+            "153 255 204 153 255 204 153 255 204 153 255 204 153",
+            ppm_iter.next().unwrap()
+        );
+        assert_eq!(
+            "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
+            ppm_iter.next().unwrap()
+        );
+        assert_eq!(
+            "153 255 204 153 255 204 153 255 204 153 255 204 153",
+            ppm_iter.next().unwrap()
+        );
+    }
+
+    #[test]
+    fn ppm_newline_character_termination() {
+        let c = Canvas::new(5, 3);
+        let ppm = c.get_ppm();
+        assert_eq!(ppm.chars().last().unwrap(), '\n');
     }
 }
