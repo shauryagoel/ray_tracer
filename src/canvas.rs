@@ -1,4 +1,5 @@
 use crate::Color;
+use std::fs;
 
 pub struct Canvas {
     pub width: usize,
@@ -36,6 +37,11 @@ impl Canvas {
         let pixel_values = self.get_ppm_pixel_values();
         s += &(header + &pixel_values);
         s
+    }
+
+    // Write the string ppm to the file file_path
+    pub fn write_ppm(&self, ppm_string: &str, file_path: &str) {
+        fs::write(file_path, ppm_string).expect("Unable to write ppm");
     }
 
     fn get_ppm_header(&self) -> String {
