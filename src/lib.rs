@@ -3,6 +3,7 @@ mod color;
 mod matrix;
 mod matrix_small;
 mod projectile;
+mod transformation;
 mod tuple;
 mod utils;
 
