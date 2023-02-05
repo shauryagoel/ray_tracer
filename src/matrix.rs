@@ -1,4 +1,5 @@
 use crate::Compare;
+use crate::Matrix3;
 use crate::Tuple;
 
 const MATRIX_SIZE: usize = 4;
@@ -30,6 +31,65 @@ impl Matrix {
         for i in 1..MATRIX_SIZE {
             for j in 0..i {
                 (result[i][j], result[j][i]) = (result[j][i], result[i][j]);
+            }
+        }
+        result
+    }
+
+    pub fn submatrix(&self, row_ind: usize, col_ind: usize) -> Matrix3 {
+        let mut result = Matrix3::new();
+        let mut orig_row_ind: usize = 0;
+        for i in 0..result.data.len() {
+            if orig_row_ind == row_ind {
+                orig_row_ind += 1;
+            }
+            let mut orig_col_ind: usize = 0;
+            for j in 0..result.data[0].len() {
+                if orig_col_ind == col_ind {
+                    orig_col_ind += 1;
+                }
+                result[i][j] = self[orig_row_ind][orig_col_ind];
+                orig_col_ind += 1;
+            }
+            orig_row_ind += 1;
+        }
+        result
+    }
+
+    // Minor is determinant of a submatrix
+    pub fn minor(&self, row_ind: usize, col_ind: usize) -> f32 {
+        self.submatrix(row_ind, col_ind).determinant()
+    }
+
+    // Cofactor is minor with possibly a sign depending on row and col index
+    pub fn cofactor(&self, row_ind: usize, col_ind: usize) -> f32 {
+        let sign = (-1_f32).powi((row_ind + col_ind) as i32);
+        sign * self.minor(row_ind, col_ind)
+    }
+
+    // Find determinant using cofactors
+    pub fn determinant(&self) -> f32 {
+        let mut result: f32 = 0.0;
+        for i in 0..MATRIX_SIZE {
+            result += self.cofactor(0, i) * self[0][i];
+        }
+        result
+    }
+
+    pub fn is_invertible(&self) -> bool {
+        self.determinant() != 0.0
+    }
+
+    // Calculate inverse of the matrix, panic if no inverse possible
+    pub fn inverse(&self) -> Self {
+        let determinant = self.determinant();
+        if !self.is_invertible() {
+            panic!("Matrix is not invertible");
+        }
+        let mut result = Matrix::new();
+        for i in 0..MATRIX_SIZE {
+            for j in 0..MATRIX_SIZE {
+                result[j][i] = self.cofactor(i, j) / determinant;
             }
         }
         result
@@ -416,5 +476,322 @@ mod matrix_tests {
     #[test]
     fn transpose_identity_matrix() {
         assert!(Matrix::I() == Matrix::I().transpose());
+    }
+
+    #[test]
+    fn matrix_submatrix() {
+        let mut a = Matrix::new();
+        a[0][0] = -6.0;
+        a[0][1] = 1.0;
+        a[0][2] = 1.0;
+        a[0][3] = 6.0;
+
+        a[1][0] = -8.0;
+        a[1][1] = 5.0;
+        a[1][2] = 8.0;
+        a[1][3] = 6.0;
+
+        a[2][0] = -1.0;
+        a[2][1] = 0.0;
+        a[2][2] = 8.0;
+        a[2][3] = 2.0;
+
+        a[3][0] = -7.0;
+        a[3][1] = 1.0;
+        a[3][2] = -1.0;
+        a[3][3] = 1.0;
+
+        let mut b = Matrix3::new();
+        b[0][0] = -6.0;
+        b[0][1] = 1.0;
+        b[0][2] = 6.0;
+        b[1][0] = -8.0;
+        b[1][1] = 8.0;
+        b[1][2] = 6.0;
+        b[2][0] = -7.0;
+        b[2][1] = -1.0;
+        b[2][2] = 1.0;
+
+        assert!(a.submatrix(2, 1) == b);
+    }
+
+    #[test]
+    fn matrix_determinant() {
+        let mut a = Matrix::new();
+        a[0][0] = -2.0;
+        a[0][1] = -8.0;
+        a[0][2] = 3.0;
+        a[0][3] = 5.0;
+
+        a[1][0] = -3.0;
+        a[1][1] = 1.0;
+        a[1][2] = 7.0;
+        a[1][3] = 3.0;
+
+        a[2][0] = 1.0;
+        a[2][1] = 2.0;
+        a[2][2] = -9.0;
+        a[2][3] = 6.0;
+
+        a[3][0] = -6.0;
+        a[3][1] = 7.0;
+        a[3][2] = 7.0;
+        a[3][3] = -9.0;
+
+        assert_eq!(a.cofactor(0, 0), 690.0);
+        assert_eq!(a.cofactor(0, 1), 447.0);
+        assert_eq!(a.cofactor(0, 2), 210.0);
+        assert_eq!(a.cofactor(0, 3), 51.0);
+        assert_eq!(a.determinant(), -4071.0);
+    }
+
+    #[test]
+    fn invertible_test1() {
+        let mut a = Matrix::new();
+        a[0][0] = 6.0;
+        a[0][1] = 4.0;
+        a[0][2] = 4.0;
+        a[0][3] = 4.0;
+
+        a[1][0] = 5.0;
+        a[1][1] = 5.0;
+        a[1][2] = 7.0;
+        a[1][3] = 6.0;
+
+        a[2][0] = 4.0;
+        a[2][1] = -9.0;
+        a[2][2] = 3.0;
+        a[2][3] = -7.0;
+
+        a[3][0] = 9.0;
+        a[3][1] = 1.0;
+        a[3][2] = 7.0;
+        a[3][3] = -6.0;
+
+        assert_eq!(a.determinant(), -2120.0);
+        assert!(a.is_invertible());
+    }
+
+    #[test]
+    fn invertible_test2() {
+        let mut a = Matrix::new();
+        a[0][0] = -4.0;
+        a[0][1] = 2.0;
+        a[0][2] = -2.0;
+        a[0][3] = -3.0;
+
+        a[1][0] = 9.0;
+        a[1][1] = 6.0;
+        a[1][2] = 2.0;
+        a[1][3] = 6.0;
+
+        a[2][0] = 0.0;
+        a[2][1] = -5.0;
+        a[2][2] = 1.0;
+        a[2][3] = -5.0;
+
+        a[3][0] = 0.0;
+        a[3][1] = 0.0;
+        a[3][2] = 0.0;
+        a[3][3] = 0.0;
+
+        assert_eq!(a.determinant(), 0.0);
+        assert!(!a.is_invertible());
+    }
+
+    #[test]
+    fn inverse_test1() {
+        let mut a = Matrix::new();
+        a[0][0] = -5.0;
+        a[0][1] = 2.0;
+        a[0][2] = 6.0;
+        a[0][3] = -8.0;
+
+        a[1][0] = 1.0;
+        a[1][1] = -5.0;
+        a[1][2] = 1.0;
+        a[1][3] = 8.0;
+
+        a[2][0] = 7.0;
+        a[2][1] = 7.0;
+        a[2][2] = -6.0;
+        a[2][3] = -7.0;
+
+        a[3][0] = 1.0;
+        a[3][1] = -3.0;
+        a[3][2] = 7.0;
+        a[3][3] = 4.0;
+
+        let b = a.inverse();
+
+        let mut _b = Matrix::new();
+        _b[0][0] = 0.21805;
+        _b[0][1] = 0.45113;
+        _b[0][2] = 0.24060;
+        _b[0][3] = -0.04511;
+
+        _b[1][0] = -0.80827;
+        _b[1][1] = -1.45677;
+        _b[1][2] = -0.44361;
+        _b[1][3] = 0.52068;
+
+        _b[2][0] = -0.07895;
+        _b[2][1] = -0.22368;
+        _b[2][2] = -0.05263;
+        _b[2][3] = 0.19737;
+
+        _b[3][0] = -0.52256;
+        _b[3][1] = -0.81391;
+        _b[3][2] = -0.30075;
+        _b[3][3] = 0.30639;
+
+        assert_eq!(a.determinant(), 532.0);
+        assert_eq!(a.cofactor(2, 3), -160.0);
+        assert!(b[3][2].eq(-160.0 / 532.0));
+        assert_eq!(a.cofactor(3, 2), 105.0);
+        assert!(b[2][3].eq(105.0 / 532.0));
+        assert!(b == _b);
+    }
+
+    #[test]
+    fn inverse_test2() {
+        let mut a = Matrix::new();
+        a[0][0] = 8.0;
+        a[0][1] = -5.0;
+        a[0][2] = 9.0;
+        a[0][3] = 2.0;
+
+        a[1][0] = 7.0;
+        a[1][1] = 5.0;
+        a[1][2] = 6.0;
+        a[1][3] = 1.0;
+
+        a[2][0] = -6.0;
+        a[2][1] = 0.0;
+        a[2][2] = 9.0;
+        a[2][3] = 6.0;
+
+        a[3][0] = -3.0;
+        a[3][1] = 0.0;
+        a[3][2] = -9.0;
+        a[3][3] = -4.0;
+
+        let mut _a = Matrix::new();
+        _a[0][0] = -0.15385;
+        _a[0][1] = -0.15385;
+        _a[0][2] = -0.28205;
+        _a[0][3] = -0.53846;
+
+        _a[1][0] = -0.07692;
+        _a[1][1] = 0.12308;
+        _a[1][2] = 0.02564;
+        _a[1][3] = 0.03077;
+
+        _a[2][0] = 0.35897;
+        _a[2][1] = 0.35897;
+        _a[2][2] = 0.43590;
+        _a[2][3] = 0.92308;
+
+        _a[3][0] = -0.69231;
+        _a[3][1] = -0.69231;
+        _a[3][2] = -0.76923;
+        _a[3][3] = -1.92308;
+
+        assert!(a.inverse() == _a);
+    }
+
+    #[test]
+    fn inverse_test3() {
+        let mut a = Matrix::new();
+        a[0][0] = 9.0;
+        a[0][1] = 3.0;
+        a[0][2] = 0.0;
+        a[0][3] = 9.0;
+
+        a[1][0] = -5.0;
+        a[1][1] = -2.0;
+        a[1][2] = -6.0;
+        a[1][3] = -3.0;
+
+        a[2][0] = -4.0;
+        a[2][1] = 9.0;
+        a[2][2] = 6.0;
+        a[2][3] = 4.0;
+
+        a[3][0] = -7.0;
+        a[3][1] = 6.0;
+        a[3][2] = 6.0;
+        a[3][3] = 2.0;
+
+        let mut _a = Matrix::new();
+        _a[0][0] = -0.04074;
+        _a[0][1] = -0.07778;
+        _a[0][2] = 0.14444;
+        _a[0][3] = -0.22222;
+
+        _a[1][0] = -0.07778;
+        _a[1][1] = 0.03333;
+        _a[1][2] = 0.36667;
+        _a[1][3] = -0.33333;
+
+        _a[2][0] = -0.02901;
+        _a[2][1] = -0.14630;
+        _a[2][2] = -0.10926;
+        _a[2][3] = 0.12963;
+
+        _a[3][0] = 0.17778;
+        _a[3][1] = 0.06667;
+        _a[3][2] = -0.26667;
+        _a[3][3] = 0.33333;
+
+        assert!(a.inverse() == _a);
+    }
+
+    #[test]
+    fn mulitplication_by_inverse() {
+        let mut a = Matrix::new();
+        a[0][0] = 3.0;
+        a[0][1] = -9.0;
+        a[0][2] = 7.0;
+        a[0][3] = 3.0;
+
+        a[1][0] = 3.0;
+        a[1][1] = -8.0;
+        a[1][2] = 2.0;
+        a[1][3] = -9.0;
+
+        a[2][0] = -4.0;
+        a[2][1] = 4.0;
+        a[2][2] = 4.0;
+        a[2][3] = 1.0;
+
+        a[3][0] = -6.0;
+        a[3][1] = 5.0;
+        a[3][2] = -1.0;
+        a[3][3] = 1.0;
+
+        let mut b = Matrix::new();
+        b[0][0] = 8.0;
+        b[0][1] = 2.0;
+        b[0][2] = 2.0;
+        b[0][3] = 2.0;
+
+        b[1][0] = 3.0;
+        b[1][1] = -1.0;
+        b[1][2] = 7.0;
+        b[1][3] = 0.0;
+
+        b[2][0] = 7.0;
+        b[2][1] = 0.0;
+        b[2][2] = 5.0;
+        b[2][3] = 4.0;
+
+        b[3][0] = 6.0;
+        b[3][1] = -2.0;
+        b[3][2] = 0.0;
+        b[3][3] = 5.0;
+
+        let c = a * b;
+        assert!(c * b.inverse() == a);
     }
 }
