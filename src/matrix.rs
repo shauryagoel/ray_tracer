@@ -3,15 +3,36 @@ use crate::Tuple;
 
 const MATRIX_SIZE: usize = 4;
 
-#[derive(Default)]
+#[derive(Default, Copy, Clone)]
 pub struct Matrix {
     pub data: [[f32; MATRIX_SIZE]; MATRIX_SIZE],
 }
 
 impl Matrix {
     // Initialize a new matrix with 0's
-    pub fn new() -> Matrix {
+    pub fn new() -> Self {
         Self::default()
+    }
+
+    // Initialize identity matrix
+    #[allow(non_snake_case)] // For usage of I
+    pub fn I() -> Self {
+        let mut identity_matrix = Self::new();
+        for i in 0..MATRIX_SIZE {
+            identity_matrix[i][i] = 1.0;
+        }
+        identity_matrix
+    }
+
+    // Create a copy of input and transposes inplace
+    pub fn transpose(&self) -> Self {
+        let mut result = *self;
+        for i in 1..MATRIX_SIZE {
+            for j in 0..i {
+                (result[i][j], result[j][i]) = (result[j][i], result[i][j]);
+            }
+        }
+        result
     }
 }
 
@@ -309,5 +330,91 @@ mod matrix_tests {
         let result = Tuple::new(18.0, 24.0, 33.0, 1.0);
 
         assert!(a * b == result);
+    }
+
+    #[test]
+    fn matrix_multiplication_with_identity() {
+        let mut a = Matrix::new();
+        a[0][0] = 0.0;
+        a[0][1] = 1.0;
+        a[0][2] = 2.0;
+        a[0][3] = 4.0;
+
+        a[1][0] = 1.0;
+        a[1][1] = 2.0;
+        a[1][2] = 4.0;
+        a[1][3] = 8.0;
+
+        a[2][0] = 2.0;
+        a[2][1] = 4.0;
+        a[2][2] = 8.0;
+        a[2][3] = 16.0;
+
+        a[3][0] = 4.0;
+        a[3][1] = 8.0;
+        a[3][2] = 16.0;
+        a[3][3] = 32.0;
+
+        let i = Matrix::I();
+        assert!(a * i == a);
+    }
+
+    #[test]
+    fn tuple_multiplication_with_identity() {
+        let i = Matrix::I();
+        let a = Tuple::new(1.0, 2.0, 3.0, 4.0);
+
+        assert!(i * a == a);
+    }
+
+    #[test]
+    fn transpose_matrix() {
+        let mut a = Matrix::new();
+        a[0][0] = 0.0;
+        a[0][1] = 9.0;
+        a[0][2] = 3.0;
+        a[0][3] = 0.0;
+
+        a[1][0] = 9.0;
+        a[1][1] = 8.0;
+        a[1][2] = 0.0;
+        a[1][3] = 8.0;
+
+        a[2][0] = 1.0;
+        a[2][1] = 8.0;
+        a[2][2] = 5.0;
+        a[2][3] = 3.0;
+
+        a[3][0] = 0.0;
+        a[3][1] = 0.0;
+        a[3][2] = 5.0;
+        a[3][3] = 8.0;
+
+        let mut b = Matrix::new();
+        b[0][0] = 0.0;
+        b[0][1] = 9.0;
+        b[0][2] = 1.0;
+        b[0][3] = 0.0;
+
+        b[1][0] = 9.0;
+        b[1][1] = 8.0;
+        b[1][2] = 8.0;
+        b[1][3] = 0.0;
+
+        b[2][0] = 3.0;
+        b[2][1] = 0.0;
+        b[2][2] = 5.0;
+        b[2][3] = 5.0;
+
+        b[3][0] = 0.0;
+        b[3][1] = 8.0;
+        b[3][2] = 3.0;
+        b[3][3] = 8.0;
+        assert!(a.transpose() == b);
+    }
+
+    #[test]
+    fn transpose_identity_matrix() {
+        assert!(Matrix::I() == Matrix::I().transpose());
     }
 }
