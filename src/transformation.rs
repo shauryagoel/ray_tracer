@@ -72,7 +72,7 @@ mod transformation_tests {
         let p = point(-3.0, 4.0, 5.0);
         let _p = point(2.0, 1.0, 7.0);
 
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -82,7 +82,7 @@ mod transformation_tests {
         let p = point(-3.0, 4.0, 5.0);
         let _p = point(-8.0, 7.0, 3.0);
 
-        assert!(inv * p == _p);
+        assert_eq!(inv * p, _p);
     }
 
     #[test]
@@ -90,7 +90,7 @@ mod transformation_tests {
         let transform = Matrix::get_translation_matrix(5.0, -3.0, 2.0);
         let v = vector(-3.0, 4.0, 5.0);
 
-        assert!(transform * v == v);
+        assert_eq!(transform * v, v);
     }
 
     #[test]
@@ -99,7 +99,7 @@ mod transformation_tests {
         let p = point(-4.0, 6.0, 8.0);
         let _p = point(-8.0, 18.0, 32.0);
 
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -108,7 +108,7 @@ mod transformation_tests {
         let v = vector(-4.0, 6.0, 8.0);
         let _v = vector(-8.0, 18.0, 32.0);
 
-        assert!(transform * v == _v);
+        assert_eq!(transform * v, _v);
     }
 
     #[test]
@@ -118,7 +118,7 @@ mod transformation_tests {
         let v = vector(-4.0, 6.0, 8.0);
         let _v = vector(-2.0, 2.0, 2.0);
 
-        assert!(inv * v == _v);
+        assert_eq!(inv * v, _v);
     }
 
     #[test]
@@ -127,7 +127,7 @@ mod transformation_tests {
         let p = point(2.0, 3.0, 4.0);
         let _p = point(-2.0, 3.0, 4.0);
 
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -138,8 +138,8 @@ mod transformation_tests {
         let _p1 = point(0.0, 2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0);
         let _p2 = point(0.0, 0.0, 1.0);
 
-        assert!(half_quarter * p == _p1);
-        assert!(full_quarter * p == _p2);
+        assert_eq!(half_quarter * p, _p1);
+        assert_eq!(full_quarter * p, _p2);
     }
 
     #[test]
@@ -148,7 +148,7 @@ mod transformation_tests {
         let half_quarter = Matrix::get_rotation_x_matrix(PI / 4.0);
         let inv = half_quarter.inverse();
         let _p = point(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
-        assert!(inv * p == _p);
+        assert_eq!(inv * p, _p);
     }
 
     #[test]
@@ -159,8 +159,8 @@ mod transformation_tests {
         let _p1 = point(2.0_f32.sqrt() / 2.0, 0.0, 2.0_f32.sqrt() / 2.0);
         let _p2 = point(1.0, 0.0, 0.0);
 
-        assert!(half_quarter * p == _p1);
-        assert!(full_quarter * p == _p2);
+        assert_eq!(half_quarter * p, _p1);
+        assert_eq!(full_quarter * p, _p2);
     }
 
     #[test]
@@ -171,8 +171,8 @@ mod transformation_tests {
         let _p1 = point(-2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
         let _p2 = point(-1.0, 0.0, 0.0);
 
-        assert!(half_quarter * p == _p1);
-        assert!(full_quarter * p == _p2);
+        assert_eq!(half_quarter * p, _p1);
+        assert_eq!(full_quarter * p, _p2);
     }
 
     #[test]
@@ -180,7 +180,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(1.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(5.0, 3.0, 4.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -188,7 +188,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(6.0, 3.0, 4.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -196,7 +196,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(2.0, 5.0, 4.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -204,7 +204,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(0.0, 0.0, 0.0, 1.0, 0.0, 0.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(2.0, 7.0, 4.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -212,7 +212,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(2.0, 3.0, 6.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[test]
@@ -220,7 +220,7 @@ mod transformation_tests {
         let transform = Matrix::get_shearing_matrix(0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
         let p = point(2.0, 3.0, 4.0);
         let _p = point(2.0, 3.0, 7.0);
-        assert!(transform * p == _p);
+        assert_eq!(transform * p, _p);
     }
 
     #[allow(non_snake_case)]
@@ -232,13 +232,13 @@ mod transformation_tests {
         let C = Matrix::get_translation_matrix(10.0, 5.0, 7.0);
 
         let p2 = A * p;
-        assert!(p2 == point(1.0, -1.0, 0.0));
+        assert_eq!(p2, point(1.0, -1.0, 0.0));
 
         let p3 = B * p2;
-        assert!(p3 == point(5.0, -5.0, 0.0));
+        assert_eq!(p3, point(5.0, -5.0, 0.0));
 
         let p4 = C * p3;
-        assert!(p4 == point(15.0, 0.0, 7.0));
+        assert_eq!(p4, point(15.0, 0.0, 7.0));
     }
 
     #[allow(non_snake_case)]
@@ -250,6 +250,6 @@ mod transformation_tests {
         let C = Matrix::get_translation_matrix(10.0, 5.0, 7.0);
         let T = C * B * A;
 
-        assert!(T * p == point(15.0, 0.0, 7.0));
+        assert_eq!(T * p, point(15.0, 0.0, 7.0));
     }
 }

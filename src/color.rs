@@ -4,7 +4,7 @@ use crate::Compare;
 // All the components should be between 0 and 1
 // No such constraint has been added because during processing of algorithms, color value can be <0 or >1,
 // if we clip at every stage, then the final image would be too dark or too light
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Color {
     pub red: f32,   // red component of the color
     pub green: f32, // green component of the color
@@ -115,7 +115,7 @@ mod color_tests {
         let c1 = Color::new(0.9, 0.6, 0.75);
         let c2 = Color::new(0.7, 0.1, 0.25);
         let _c = Color::new(1.6, 0.7, 1.0);
-        assert!(c1 + c2 == _c);
+        assert_eq!(c1 + c2, _c);
     }
 
     #[test]
@@ -123,21 +123,21 @@ mod color_tests {
         let c1 = Color::new(0.9, 0.6, 0.75);
         let c2 = Color::new(0.7, 0.1, 0.25);
         let _c = Color::new(0.2, 0.5, 0.5);
-        assert!(c1 - c2 == _c);
+        assert_eq!(c1 - c2, _c);
     }
 
     #[test]
     fn color_scalar_multiply1() {
         let c = Color::new(0.2, 0.3, 0.4);
         let _c = Color::new(0.4, 0.6, 0.8);
-        assert!(2.0 * c == _c);
+        assert_eq!(2.0 * c, _c);
     }
 
     #[test]
     fn color_scalar_multiply2() {
         let c = Color::new(0.2, 0.3, 0.4);
         let _c = Color::new(0.4, 0.6, 0.8);
-        assert!(c * 2.0 == _c);
+        assert_eq!(c * 2.0, _c);
     }
 
     #[test]
@@ -145,6 +145,6 @@ mod color_tests {
         let c1 = Color::new(1.0, 0.2, 0.4);
         let c2 = Color::new(0.9, 1.0, 0.1);
         let _c = Color::new(0.9, 0.2, 0.04);
-        assert!(c1 * c2 == _c);
+        assert_eq!(c1 * c2, _c);
     }
 }

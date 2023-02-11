@@ -1,7 +1,6 @@
 use crate::Sphere;
 
 // Store data for ray intersection with a object in the scene
-#[derive(Clone, Copy, Debug)]
 pub struct Intersection {
     t: f32,
     object: Sphere, // TODO: use dynamic data type
@@ -34,6 +33,12 @@ impl Intersections {
     }
 }
 
+impl Default for Intersections {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 // Self has only a vector so abstract out indexing
 impl std::ops::Index<usize> for Intersections {
     type Output = Intersection;
@@ -55,18 +60,18 @@ mod sphere_tests {
 
     #[test]
     fn intersection_creation() {
-        let s = Sphere::new();
-        let i = Intersection::new(3.5, Sphere::new());
+        let s = Sphere::default();
+        let i = Intersection::new(3.5, Sphere::default());
         assert_eq!(i.t, 3.5);
         assert_eq!(i.object, s);
     }
 
     #[test]
     fn intersections_test() {
-        let s = Sphere::new();
+        let s = Sphere::default();
         let i1 = Intersection::new(1.0, s);
         let i2 = Intersection::new(2.0, s);
-        let mut xs = Intersections::new();
+        let mut xs = Intersections::default();
         xs.push(i1);
         xs.push(i2);
         assert_eq!(xs.len(), 2);

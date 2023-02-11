@@ -1,11 +1,11 @@
 use crate::Compare;
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Matrix2 {
     pub data: [[f32; 2]; 2],
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Matrix3 {
     pub data: [[f32; 3]; 3],
 }
@@ -97,7 +97,7 @@ impl std::ops::IndexMut<usize> for Matrix3 {
     }
 }
 
-// TODO: Remove duplicate code for Matrix2 and Matrix2
+// TODO: Remove duplicate code for Matrix2 and Matrix3
 impl PartialEq for Matrix2 {
     fn eq(&self, other: &Self) -> bool {
         for row in 0..2 {
@@ -188,7 +188,7 @@ mod small_matrix_tests {
         b[1][0] = 0.0;
         b[1][1] = 6.0;
 
-        assert!(a.submatrix(0, 2) == b);
+        assert_eq!(a.submatrix(0, 2), b);
     }
 
     #[test]
