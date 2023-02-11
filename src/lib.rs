@@ -1,5 +1,6 @@
 mod canvas;
 mod color;
+mod intersection;
 mod matrix;
 mod matrix_small;
 mod projectile;
@@ -11,6 +12,7 @@ mod utils;
 
 pub use canvas::Canvas;
 pub use color::Color;
+pub use intersection::Intersection;
 pub use matrix::Matrix;
 pub use matrix_small::{Matrix2, Matrix3};
 pub use projectile::{Environment, Projectile};

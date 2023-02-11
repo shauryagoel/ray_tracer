@@ -1,6 +1,6 @@
 use crate::Compare;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Tuple {
     pub x: f32, // x coordinate of the Tuple
     pub y: f32, // y coordinate of the Tuple
