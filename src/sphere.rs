@@ -1,6 +1,8 @@
+use crate::Compare;
 use crate::Ray;
 use crate::{point, Tuple};
 
+#[derive(Copy, Clone, Debug)]
 pub struct Sphere {
     center: Tuple,
     radius: f32,
@@ -29,6 +31,12 @@ impl Sphere {
             let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
             vec![t1, t2]
         }
+    }
+}
+
+impl PartialEq for Sphere {
+    fn eq(&self, other: &Sphere) -> bool {
+        self.center == other.center && self.radius.eq(other.radius)
     }
 }
 
