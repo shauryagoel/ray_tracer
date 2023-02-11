@@ -142,14 +142,14 @@ mod tests {
     fn point_factory() {
         let p = point(4.0, -4.0, 3.0);
         let _p = Tuple::new(4.0, -4.0, 3.0, 1.0);
-        assert!(p == _p);
+        assert_eq!(p, _p);
     }
 
     #[test]
     fn vector_factory() {
         let p = vector(4.0, -4.0, 3.0);
         let _p = Tuple::new(4.0, -4.0, 3.0, 0.0);
-        assert!(p == _p);
+        assert_eq!(p, _p);
     }
 
     #[test]
@@ -157,7 +157,7 @@ mod tests {
         let a1 = Tuple::new(3.0, -2.0, 5.0, 1.0);
         let a2 = Tuple::new(-2.0, 3.0, 1.0, 0.0);
         let _a = Tuple::new(1.0, 1.0, 6.0, 1.0);
-        assert!(a1 + a2 == _a)
+        assert_eq!(a1 + a2, _a)
     }
 
     #[test]
@@ -165,7 +165,7 @@ mod tests {
         let p1 = point(3.0, 2.0, 1.0);
         let p2 = point(5.0, 6.0, 7.0);
         let _p = vector(-2.0, -4.0, -6.0);
-        assert!(p1 - p2 == _p);
+        assert_eq!(p1 - p2, _p);
     }
 
     #[test]
@@ -173,7 +173,7 @@ mod tests {
         let p = point(3.0, 2.0, 1.0);
         let v = vector(5.0, 6.0, 7.0);
         let _a = point(-2.0, -4.0, -6.0);
-        assert!(p - v == _a);
+        assert_eq!(p - v, _a);
     }
 
     #[test]
@@ -181,7 +181,7 @@ mod tests {
         let p1 = vector(3.0, 2.0, 1.0);
         let p2 = vector(5.0, 6.0, 7.0);
         let _p = vector(-2.0, -4.0, -6.0);
-        assert!(p1 - p2 == _p);
+        assert_eq!(p1 - p2, _p);
     }
 
     #[test]
@@ -189,35 +189,35 @@ mod tests {
         let zero = vector(0.0, 0.0, 0.0);
         let v = vector(1.0, -2.0, 3.0);
         let _v = vector(-1.0, 2.0, -3.0);
-        assert!(zero - v == _v);
+        assert_eq!(zero - v, _v);
     }
 
     #[test]
     fn negation() {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(-1.0, 2.0, -3.0, 4.0);
-        assert!(-a == _a);
+        assert_eq!(-a, _a);
     }
 
     #[test]
     fn scaling_tuple() {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(3.5, -7.0, 10.5, -14.0);
-        assert!(a * 3.5 == _a);
+        assert_eq!(a * 3.5, _a);
     }
 
     #[test]
     fn fraction_scaling_tuple() {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(0.5, -1.0, 1.5, -2.0);
-        assert!(a * 0.5 == _a);
+        assert_eq!(a * 0.5, _a);
     }
 
     #[test]
     fn dividing_tuple() {
         let a = Tuple::new(1.0, -2.0, 3.0, -4.0);
         let _a = Tuple::new(0.5, -1.0, 1.5, -2.0);
-        assert!(a / 2.0 == _a);
+        assert_eq!(a / 2.0, _a);
     }
 
     #[test]
@@ -254,14 +254,14 @@ mod tests {
     fn vector_normalize1() {
         let v = vector(4.0, 0.0, 0.0);
         let _v = vector(1.0, 0.0, 0.0);
-        assert!(v.normalize() == _v);
+        assert_eq!(v.normalize(), _v);
     }
 
     #[test]
     fn vector_normalize2() {
         let v = vector(1.0, 2.0, 3.0);
         let _v = vector(0.26726, 0.53452, 0.80178);
-        assert!(v.normalize() == _v);
+        assert_eq!(v.normalize(), _v);
     }
 
     #[test]
@@ -284,7 +284,7 @@ mod tests {
         let a = vector(1.0, 2.0, 3.0);
         let b = vector(2.0, 3.0, 4.0);
         let _v = vector(-1.0, 2.0, -1.0);
-        assert!(a.cross(&b) == _v);
-        assert!(b.cross(&a) == -_v);
+        assert_eq!(a.cross(&b), _v);
+        assert_eq!(b.cross(&a), -_v);
     }
 }

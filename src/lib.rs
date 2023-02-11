@@ -12,7 +12,7 @@ mod utils;
 
 pub use canvas::Canvas;
 pub use color::Color;
-pub use intersection::Intersection;
+pub use intersection::{Intersection, Intersections};
 pub use matrix::Matrix;
 pub use matrix_small::{Matrix2, Matrix3};
 pub use projectile::{Environment, Projectile};

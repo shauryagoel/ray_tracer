@@ -1,5 +1,6 @@
 use crate::Tuple;
 
+#[derive(Debug)]
 pub struct Ray {
     pub origin: Tuple,
     pub direction: Tuple,
@@ -26,7 +27,7 @@ mod ray_tests {
         let origin = point(1.0, 2.0, 3.0);
         let direction = vector(4.0, 5.0, 6.0);
         let r = Ray::new(origin, direction);
-        assert!(r.origin == origin);
-        assert!(r.direction == direction);
+        assert_eq!(r.origin, origin);
+        assert_eq!(r.direction, direction);
     }
 }

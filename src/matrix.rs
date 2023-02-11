@@ -4,7 +4,7 @@ use crate::Tuple;
 
 const MATRIX_SIZE: usize = 4;
 
-#[derive(Default, Copy, Clone)]
+#[derive(Copy, Clone, Debug, Default)]
 pub struct Matrix {
     pub data: [[f32; MATRIX_SIZE]; MATRIX_SIZE],
 }
@@ -245,7 +245,7 @@ mod matrix_tests {
         m2[3][2] = 3.0;
         m2[3][3] = 2.0;
 
-        assert!(m1 == m2);
+        assert_eq!(m1, m2);
     }
 
     #[test]
@@ -292,7 +292,7 @@ mod matrix_tests {
         m2[3][2] = 2.0;
         m2[3][3] = 1.0;
 
-        assert!(m1 != m2);
+        assert_ne!(m1, m2);
     }
 
     #[test]
@@ -360,7 +360,7 @@ mod matrix_tests {
         m3[3][2] = 46.0;
         m3[3][3] = 42.0;
 
-        assert!(m1 * m2 == m3);
+        assert_eq!(m1 * m2, m3);
     }
 
     #[test]
@@ -389,7 +389,7 @@ mod matrix_tests {
         let b = Tuple::new(1.0, 2.0, 3.0, 1.0);
         let result = Tuple::new(18.0, 24.0, 33.0, 1.0);
 
-        assert!(a * b == result);
+        assert_eq!(a * b, result);
     }
 
     #[test]
@@ -416,7 +416,7 @@ mod matrix_tests {
         a[3][3] = 32.0;
 
         let i = Matrix::I();
-        assert!(a * i == a);
+        assert_eq!(a * i, a);
     }
 
     #[test]
@@ -424,7 +424,7 @@ mod matrix_tests {
         let i = Matrix::I();
         let a = Tuple::new(1.0, 2.0, 3.0, 4.0);
 
-        assert!(i * a == a);
+        assert_eq!(i * a, a);
     }
 
     #[test]
@@ -470,12 +470,12 @@ mod matrix_tests {
         b[3][1] = 8.0;
         b[3][2] = 3.0;
         b[3][3] = 8.0;
-        assert!(a.transpose() == b);
+        assert_eq!(a.transpose(), b);
     }
 
     #[test]
     fn transpose_identity_matrix() {
-        assert!(Matrix::I() == Matrix::I().transpose());
+        assert_eq!(Matrix::I(), Matrix::I().transpose());
     }
 
     #[test]
@@ -512,7 +512,7 @@ mod matrix_tests {
         b[2][1] = -1.0;
         b[2][2] = 1.0;
 
-        assert!(a.submatrix(2, 1) == b);
+        assert_eq!(a.submatrix(2, 1), b);
     }
 
     #[test]
@@ -650,7 +650,7 @@ mod matrix_tests {
         assert!(b[3][2].eq(-160.0 / 532.0));
         assert_eq!(a.cofactor(3, 2), 105.0);
         assert!(b[2][3].eq(105.0 / 532.0));
-        assert!(b == _b);
+        assert_eq!(b, _b);
     }
 
     #[test]
@@ -697,7 +697,7 @@ mod matrix_tests {
         _a[3][2] = -0.76923;
         _a[3][3] = -1.92308;
 
-        assert!(a.inverse() == _a);
+        assert_eq!(a.inverse(), _a);
     }
 
     #[test]
@@ -744,7 +744,7 @@ mod matrix_tests {
         _a[3][2] = -0.26667;
         _a[3][3] = 0.33333;
 
-        assert!(a.inverse() == _a);
+        assert_eq!(a.inverse(), _a);
     }
 
     #[test]
@@ -792,6 +792,6 @@ mod matrix_tests {
         b[3][3] = 5.0;
 
         let c = a * b;
-        assert!(c * b.inverse() == a);
+        assert_eq!(c * b.inverse(), a);
     }
 }
