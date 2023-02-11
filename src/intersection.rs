@@ -2,8 +2,8 @@ use crate::Sphere;
 
 // Store data for ray intersection with a object in the scene
 pub struct Intersection {
-    t: f32,
-    object: Sphere, // TODO: use dynamic data type
+    pub t: f32,
+    pub object: Sphere, // TODO: use dynamic data type
 }
 
 impl Intersection {
@@ -30,6 +30,10 @@ impl Intersections {
     // Self has only a vector so abstract out length
     pub fn len(&self) -> usize {
         self.data.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.data.len() == 0
     }
 }
 
