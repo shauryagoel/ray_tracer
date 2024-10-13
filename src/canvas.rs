@@ -32,18 +32,20 @@ impl Canvas {
 
     // Convert canvas to ppm format
     pub fn get_ppm(&self) -> String {
-        let mut s: String = String::from("");
         let header = self.get_ppm_header();
         let pixel_values = self.get_ppm_pixel_values();
-        s += &(header + &pixel_values);
-        s
+        header + &pixel_values
     }
 
-    // Write the string ppm to the file file_path
+    // Write the string ppm to the `file_path`
     pub fn write_ppm(&self, ppm_string: &str, file_path: &str) {
         fs::write(file_path, ppm_string).expect("Unable to write ppm");
     }
 
+    // PPM format-
+    // PPM FLAVOUR (eg.- P3)
+    // IMAGE_WIDTH IMAGE_HEIGHT (both are in pixels)
+    // MAXIMUM_COLOR_VALUE (eg.- 255)
     fn get_ppm_header(&self) -> String {
         let mut header: String = String::from("");
         header += "P3\n";
@@ -61,7 +63,7 @@ impl Canvas {
                 let _color = self.pixel_at(col, row);
 
                 for pixel_value in [_color.red, _color.green, _color.blue] {
-                    let pixel_value_string = self.scale_color_to_string(pixel_value);
+                    let pixel_value_string = self.scale_and_clip_color(pixel_value).to_string();
 
                     // Ensure that each row is at max 70 characters long
                     if pixels_row.len() + pixel_value_string.len() > 69 {
@@ -81,12 +83,13 @@ impl Canvas {
         pixels
     }
 
-    // Scales the color value and clip between 0 and 255 and convert to string
-    fn scale_color_to_string(&self, color_value: f32) -> String {
-        ((color_value * 255_f32).clamp(0.0, 255.0).round() as u8).to_string()
+    // Scales the color value and clip between 0 and 255
+    fn scale_and_clip_color(&self, color_value: f32) -> u8 {
+        (color_value * 255_f32).clamp(0.0, 255.0).round() as u8
     }
 }
 
+// For indexing a row in a Canvas
 impl std::ops::Index<usize> for Canvas {
     type Output = [Color];
 
@@ -95,6 +98,7 @@ impl std::ops::Index<usize> for Canvas {
     }
 }
 
+// For indexing a row in a mutable Canvas
 impl std::ops::IndexMut<usize> for Canvas {
     fn index_mut(&mut self, row: usize) -> &mut Self::Output {
         &mut self.data[row * self.width..(row + 1) * self.width]
@@ -114,7 +118,7 @@ mod canvas_tests {
         assert_eq!(c.height, 20);
         for i in 1..c.height {
             for j in 1..c.width {
-                assert!(c.pixel_at(j, i) == black_color);
+                assert_eq!(c.pixel_at(j, i), black_color);
             }
         }
     }
@@ -124,7 +128,7 @@ mod canvas_tests {
         let mut c = Canvas::new(10, 20);
         let red = Color::new(1.0, 0.0, 0.0);
         c.write_pixel(2, 3, red);
-        assert!(c.pixel_at(2, 3) == red);
+        assert_eq!(c.pixel_at(2, 3), red);
     }
 
     #[test]

@@ -27,6 +27,7 @@ impl Matrix3 {
         Self::default()
     }
 
+    // Generate a 2x2 submatrix from the 3x3 by removing all the data in `row_ind` row and `col_ind` column
     pub fn submatrix(&self, row_ind: usize, col_ind: usize) -> Matrix2 {
         let mut result = Matrix2::new();
         let mut orig_row_ind: usize = 0;

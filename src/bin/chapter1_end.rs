@@ -24,7 +24,7 @@ fn main() {
             environment.projectile.position.y,
             environment.projectile.position.z
         );
-        environment.projectile = environment.tick();
+        environment.tick();
         number_of_tick_to_hit_ground += 1;
     }
     println!("Number of ticks to hit the ground: {number_of_tick_to_hit_ground}");
