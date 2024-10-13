@@ -2,14 +2,8 @@ use crate::Sphere;
 
 // Store data for ray intersection with a object in the scene
 pub struct Intersection {
-    pub t: f32,
+    pub t: f32,         // At what time hit occured
     pub object: Sphere, // TODO: use dynamic data type
-}
-
-impl Intersection {
-    pub fn new(t: f32, object: Sphere) -> Intersection {
-        Intersection { t, object }
-    }
 }
 
 // Store vector of all intersections
@@ -17,9 +11,15 @@ pub struct Intersections {
     data: Vec<Intersection>,
 }
 
+impl Intersection {
+    pub fn new(t: f32, object: Sphere) -> Self {
+        Self { t, object }
+    }
+}
+
 impl Intersections {
-    pub fn new() -> Intersections {
-        Intersections { data: vec![] }
+    pub fn new() -> Self {
+        Self { data: vec![] }
     }
 
     // Self has only a vector so abstract out push
@@ -38,6 +38,7 @@ impl Intersections {
 }
 
 impl Default for Intersections {
+    // Create empty vector of intersections
     fn default() -> Self {
         Self::new()
     }
@@ -61,6 +62,8 @@ impl std::ops::IndexMut<usize> for Intersections {
 #[cfg(test)]
 mod sphere_tests {
     use super::*;
+    use crate::Ray;
+    use crate::{point, vector};
 
     #[test]
     fn intersection_creation() {
@@ -81,5 +84,14 @@ mod sphere_tests {
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, 1.0);
         assert_eq!(xs[1].t, 2.0);
+    }
+
+    #[test]
+    fn intersection_returning_objects() {
+        let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let s = Sphere::default();
+        let xs = s.intersects(r);
+        assert_eq!(xs[0].object, s);
+        assert_eq!(xs[1].object, s);
     }
 }

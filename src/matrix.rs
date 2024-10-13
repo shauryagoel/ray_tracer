@@ -36,6 +36,7 @@ impl Matrix {
         result
     }
 
+    // Generate a 3x3 submatrix from the self matrix by removing all the data in `row_ind` row and `col_ind` column
     pub fn submatrix(&self, row_ind: usize, col_ind: usize) -> Matrix3 {
         let mut result = Matrix3::new();
         let mut orig_row_ind: usize = 0;
@@ -89,7 +90,7 @@ impl Matrix {
         let mut result = Matrix::new();
         for i in 0..MATRIX_SIZE {
             for j in 0..MATRIX_SIZE {
-                result[j][i] = self.cofactor(i, j) / determinant;
+                result[j][i] = self.cofactor(i, j) / determinant; // Also doing the transpose
             }
         }
         result
@@ -124,6 +125,7 @@ impl PartialEq for Matrix {
     }
 }
 
+// matrix * matrix
 impl std::ops::Mul<Matrix> for Matrix {
     type Output = Self;
 
@@ -140,6 +142,7 @@ impl std::ops::Mul<Matrix> for Matrix {
     }
 }
 
+// matrix * tuple
 impl std::ops::Mul<Tuple> for Matrix {
     type Output = Tuple;
 

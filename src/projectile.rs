@@ -12,12 +12,10 @@ pub struct Environment {
 }
 
 impl Environment {
-    pub fn tick(&mut self) -> Projectile {
+    pub fn tick(&mut self) {
         let new_position = self.projectile.position + self.projectile.velocity;
         let new_velocity = self.projectile.velocity + self.gravity + self.wind;
-        Projectile {
-            position: new_position,
-            velocity: new_velocity,
-        }
+        self.projectile.position = new_position;
+        self.projectile.velocity = new_velocity;
     }
 }

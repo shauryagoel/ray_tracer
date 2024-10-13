@@ -5,17 +5,17 @@ use crate::{Intersection, Intersections};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Sphere {
+    // TODO: add `id` to it as described in the book
     center: Tuple,
     radius: f32,
 }
 
 impl Sphere {
-    // Create a sphere centered at origin and of radius 1
-    pub fn new(center: Tuple, radius: f32) -> Sphere {
-        Sphere { center, radius }
+    pub fn new(center: Tuple, radius: f32) -> Self {
+        Self { center, radius }
     }
 
-    // Find at which t, ray intersects sphere
+    // Returns the time at which ray intersects sphere
     pub fn intersects(&self, ray: Ray) -> Intersections {
         let sphere_to_ray = ray.origin - self.center;
         let a = ray.direction.dot(&ray.direction);
@@ -35,6 +35,7 @@ impl Sphere {
 }
 
 impl Default for Sphere {
+    // Create a sphere centered at origin and of radius 1
     fn default() -> Self {
         Self::new(point(0.0, 0.0, 0.0), 1.0)
     }

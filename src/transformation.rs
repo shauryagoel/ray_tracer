@@ -1,7 +1,7 @@
 use crate::Matrix;
 
 impl Matrix {
-    pub fn get_translation_matrix(x: f32, y: f32, z: f32) -> Matrix {
+    pub fn get_translation_matrix(x: f32, y: f32, z: f32) -> Self {
         let mut transformation_matrix = Matrix::I();
         transformation_matrix[0][3] = x;
         transformation_matrix[1][3] = y;
@@ -9,7 +9,7 @@ impl Matrix {
         transformation_matrix
     }
 
-    pub fn get_scaling_matrix(x: f32, y: f32, z: f32) -> Matrix {
+    pub fn get_scaling_matrix(x: f32, y: f32, z: f32) -> Self {
         let mut transformation_matrix = Matrix::new();
         transformation_matrix[0][0] = x;
         transformation_matrix[1][1] = y;
@@ -19,7 +19,7 @@ impl Matrix {
     }
 
     // Get rotation matrix around +x direction, r is in radians
-    pub fn get_rotation_x_matrix(r: f32) -> Matrix {
+    pub fn get_rotation_x_matrix(r: f32) -> Self {
         let mut transformation_matrix = Matrix::I();
         transformation_matrix[1][1] = r.cos();
         transformation_matrix[1][2] = -r.sin();
@@ -29,7 +29,7 @@ impl Matrix {
     }
 
     // Get rotation matrix around +y direction, r is in radians
-    pub fn get_rotation_y_matrix(r: f32) -> Matrix {
+    pub fn get_rotation_y_matrix(r: f32) -> Self {
         let mut transformation_matrix = Matrix::I();
         transformation_matrix[0][0] = r.cos();
         transformation_matrix[0][2] = r.sin();
@@ -39,7 +39,7 @@ impl Matrix {
     }
 
     // Get rotation matrix around +z direction, r is in radians
-    pub fn get_rotation_z_matrix(r: f32) -> Matrix {
+    pub fn get_rotation_z_matrix(r: f32) -> Self {
         let mut transformation_matrix = Matrix::I();
         transformation_matrix[0][0] = r.cos();
         transformation_matrix[0][1] = -r.sin();
@@ -48,7 +48,7 @@ impl Matrix {
         transformation_matrix
     }
 
-    pub fn get_shearing_matrix(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Matrix {
+    pub fn get_shearing_matrix(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Self {
         let mut transformation_matrix = Matrix::I();
         transformation_matrix[0][1] = xy;
         transformation_matrix[0][2] = xz;
@@ -147,7 +147,7 @@ mod transformation_tests {
         let p = point(0.0, 1.0, 0.0);
         let half_quarter = Matrix::get_rotation_x_matrix(PI / 4.0);
         let inv = half_quarter.inverse();
-        let _p = point(0.0, 2.0_f32.sqrt() / 2.0, -2.0_f32.sqrt() / 2.0);
+        let _p = point(0.0, 2.0_f32.sqrt() / 2.0, -(2.0_f32.sqrt()) / 2.0);
         assert_eq!(inv * p, _p);
     }
 
@@ -168,7 +168,7 @@ mod transformation_tests {
         let p = point(0.0, 1.0, 0.0);
         let half_quarter = Matrix::get_rotation_z_matrix(PI / 4.0);
         let full_quarter = Matrix::get_rotation_z_matrix(PI / 2.0);
-        let _p1 = point(-2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
+        let _p1 = point(-(2.0_f32.sqrt()) / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
         let _p2 = point(-1.0, 0.0, 0.0);
 
         assert_eq!(half_quarter * p, _p1);

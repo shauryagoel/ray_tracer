@@ -18,8 +18,8 @@ pub fn point(x: f32, y: f32, z: f32) -> Tuple {
 }
 
 impl Tuple {
-    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Tuple {
-        Tuple { x, y, z, w }
+    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Self {
+        Self { x, y, z, w }
     }
 
     pub fn is_vector(&self) -> bool {
@@ -36,18 +36,18 @@ impl Tuple {
     }
 
     // We get a unit vector after normalization
-    pub fn normalize(&self) -> Tuple {
+    pub fn normalize(&self) -> Self {
         *self / self.magnitude()
     }
 
     // Dot product of 2 vectors
-    pub fn dot(&self, other: &Tuple) -> f32 {
+    pub fn dot(&self, other: &Self) -> f32 {
         self.x * other.x + self.y * other.y + self.z * other.z + self.w * other.w
     }
 
     // Cross product of 2 vectors
-    pub fn cross(&self, other: &Tuple) -> Tuple {
-        Tuple::new(
+    pub fn cross(&self, other: &Self) -> Self {
+        Self::new(
             self.y * other.z - self.z * other.y,
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x,
@@ -57,16 +57,17 @@ impl Tuple {
 }
 
 impl PartialEq for Tuple {
-    fn eq(&self, other: &Tuple) -> bool {
+    fn eq(&self, other: &Self) -> bool {
         self.x.eq(other.x) && self.y.eq(other.y) && self.z.eq(other.z) && self.w.eq(other.w)
     }
 }
 
+// For Tuple + Tuple
 impl std::ops::Add for Tuple {
-    type Output = Tuple;
+    type Output = Self;
 
-    fn add(self, other: Tuple) -> Tuple {
-        Tuple::new(
+    fn add(self, other: Self) -> Self {
+        Self::new(
             self.x + other.x,
             self.y + other.y,
             self.z + other.z,
@@ -75,11 +76,12 @@ impl std::ops::Add for Tuple {
     }
 }
 
+// For Tuple - Tuple
 impl std::ops::Sub for Tuple {
-    type Output = Tuple;
+    type Output = Self;
 
-    fn sub(self, other: Tuple) -> Tuple {
-        Tuple::new(
+    fn sub(self, other: Self) -> Self {
+        Self::new(
             self.x - other.x,
             self.y - other.y,
             self.z - other.z,
@@ -89,26 +91,28 @@ impl std::ops::Sub for Tuple {
 }
 
 impl std::ops::Neg for Tuple {
-    type Output = Tuple;
+    type Output = Self;
 
-    fn neg(self) -> Tuple {
-        Tuple::new(-self.x, -self.y, -self.z, -self.w)
+    fn neg(self) -> Self {
+        Self::new(-self.x, -self.y, -self.z, -self.w)
     }
 }
 
+// For tuple * scalar
 impl std::ops::Mul<f32> for Tuple {
-    type Output = Tuple;
+    type Output = Self;
 
-    fn mul(self, a: f32) -> Tuple {
-        Tuple::new(self.x * a, self.y * a, self.z * a, self.w * a)
+    fn mul(self, a: f32) -> Self {
+        Self::new(self.x * a, self.y * a, self.z * a, self.w * a)
     }
 }
 
+// For tuple / scalar
 impl std::ops::Div<f32> for Tuple {
-    type Output = Tuple;
+    type Output = Self;
 
-    fn div(self, a: f32) -> Tuple {
-        Tuple::new(self.x / a, self.y / a, self.z / a, self.w / a)
+    fn div(self, a: f32) -> Self {
+        Self::new(self.x / a, self.y / a, self.z / a, self.w / a)
     }
 }
 

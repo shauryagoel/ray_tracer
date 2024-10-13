@@ -37,6 +37,7 @@ impl Color {
     }
 }
 
+// For color + color
 impl std::ops::Add for Color {
     type Output = Self;
 
@@ -49,6 +50,7 @@ impl std::ops::Add for Color {
     }
 }
 
+// For color - color
 impl std::ops::Sub for Color {
     type Output = Self;
 
@@ -111,7 +113,7 @@ mod color_tests {
     }
 
     #[test]
-    fn color_add() {
+    fn color_color_add() {
         let c1 = Color::new(0.9, 0.6, 0.75);
         let c2 = Color::new(0.7, 0.1, 0.25);
         let _c = Color::new(1.6, 0.7, 1.0);
@@ -119,7 +121,7 @@ mod color_tests {
     }
 
     #[test]
-    fn color_sub() {
+    fn color_color_sub() {
         let c1 = Color::new(0.9, 0.6, 0.75);
         let c2 = Color::new(0.7, 0.1, 0.25);
         let _c = Color::new(0.2, 0.5, 0.5);
@@ -127,14 +129,14 @@ mod color_tests {
     }
 
     #[test]
-    fn color_scalar_multiply1() {
+    fn scalar_color_multiply() {
         let c = Color::new(0.2, 0.3, 0.4);
         let _c = Color::new(0.4, 0.6, 0.8);
         assert_eq!(2.0 * c, _c);
     }
 
     #[test]
-    fn color_scalar_multiply2() {
+    fn color_scalar_multiply() {
         let c = Color::new(0.2, 0.3, 0.4);
         let _c = Color::new(0.4, 0.6, 0.8);
         assert_eq!(c * 2.0, _c);
