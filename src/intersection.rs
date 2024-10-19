@@ -19,6 +19,12 @@ impl Intersection {
     }
 }
 
+// impl PartialEq for Intersection {
+//     fn eq(&self, other: &Self) -> bool {
+//         self.t == other.t && self.object == other.object
+//     }
+// }
+
 impl Intersections {
     pub fn new() -> Self {
         Default::default()
