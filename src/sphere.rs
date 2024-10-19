@@ -20,7 +20,11 @@ impl Sphere {
     }
 
     // Returns the time at which the `ray` intersects the sphere
-    pub fn intersects(&self, ray: Ray) -> Intersections {
+    pub fn intersect(&self, ray: Ray) -> Intersections {
+        // Transform the ray to the object space coordinates of the sphere
+        // This means applying inverse transformation of the sphere to the ray
+        let ray = ray.transform(self.transform.inverse());
+
         let sphere_to_ray = ray.origin - self.center;
         let a = ray.direction.dot(&ray.direction);
         let b = 2.0 * ray.direction.dot(&sphere_to_ray);
@@ -64,7 +68,7 @@ mod sphere_tests {
     fn sphere_ray_intersection1() {
         let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, 4.0);
         assert_eq!(xs[1].t, 6.0);
@@ -74,7 +78,7 @@ mod sphere_tests {
     fn sphere_ray_intersection2() {
         let r = Ray::new(point(0.0, 1.0, -5.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, 5.0);
         assert_eq!(xs[1].t, 5.0);
@@ -84,7 +88,7 @@ mod sphere_tests {
     fn sphere_ray_intersection3() {
         let r = Ray::new(point(0.0, 2.0, -5.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 0);
     }
 
@@ -92,7 +96,7 @@ mod sphere_tests {
     fn sphere_ray_intersection_ray_origin_inside_sphere() {
         let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, -1.0);
         assert_eq!(xs[1].t, 1.0);
@@ -102,7 +106,7 @@ mod sphere_tests {
     fn sphere_ray_intersection_before_ray_origin() {
         let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, -6.0);
         assert_eq!(xs[1].t, -4.0);
@@ -112,7 +116,7 @@ mod sphere_tests {
     fn sphere_ray_intersection_object_property() {
         let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
         let s: Sphere = Default::default();
-        let xs = s.intersects(r);
+        let xs = s.intersect(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].object, Sphere::default());
         assert_eq!(xs[1].object, Sphere::default());
@@ -130,5 +134,25 @@ mod sphere_tests {
         let t = Matrix::get_translation_matrix(2.0, 3.0, 4.0);
         s.set_transform(t);
         assert_eq!(s.transform, t);
+    }
+
+    #[test]
+    fn ray_intersect_scaled_sphere() {
+        let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let mut s: Sphere = Default::default();
+        s.set_transform(Matrix::get_scaling_matrix(2.0, 2.0, 2.0));
+        let xs = s.intersect(r);
+        assert_eq!(xs.len(), 2);
+        assert_eq!(xs[0].t, 3.0);
+        assert_eq!(xs[1].t, 7.0);
+    }
+
+    #[test]
+    fn ray_intersect_translated_sphere() {
+        let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
+        let mut s: Sphere = Default::default();
+        s.set_transform(Matrix::get_translation_matrix(5.0, 0.0, 0.0));
+        let xs = s.intersect(r);
+        assert_eq!(xs.len(), 0);
     }
 }
