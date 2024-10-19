@@ -1,5 +1,5 @@
 use crate::Ray;
-use crate::{point, Tuple};
+use crate::{point, Matrix, Tuple};
 use crate::{Intersection, Intersections};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
@@ -7,14 +7,19 @@ pub struct Sphere {
     // TODO: add `id` to it as described in the book
     center: Tuple,
     radius: f32,
+    transform: Matrix, // Transformation matrix
 }
 
 impl Sphere {
-    pub fn new(center: Tuple, radius: f32) -> Self {
-        Self { center, radius }
+    pub fn new(center: Tuple, radius: f32, transform: Matrix) -> Self {
+        Self {
+            center,
+            radius,
+            transform,
+        }
     }
 
-    // Returns the time at which ray intersects sphere
+    // Returns the time at which the `ray` intersects the sphere
     pub fn intersects(&self, ray: Ray) -> Intersections {
         let sphere_to_ray = ray.origin - self.center;
         let a = ray.direction.dot(&ray.direction);
@@ -31,12 +36,16 @@ impl Sphere {
         }
         intersections
     }
+
+    pub fn set_transform(&mut self, t: Matrix) {
+        self.transform = t;
+    }
 }
 
 impl Default for Sphere {
-    // Create a sphere centered at origin and of radius 1
+    // Create a sphere centered at origin, of radius 1 and with identity transformation matrix
     fn default() -> Self {
-        Self::new(point(0.0, 0.0, 0.0), 1.0)
+        Self::new(point(0.0, 0.0, 0.0), 1.0, Matrix::I())
     }
 }
 
@@ -107,5 +116,19 @@ mod sphere_tests {
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].object, Sphere::default());
         assert_eq!(xs[1].object, Sphere::default());
+    }
+
+    #[test]
+    fn check_sphere_default_transformation() {
+        let s: Sphere = Default::default();
+        assert_eq!(s.transform, Matrix::I());
+    }
+
+    #[test]
+    fn change_sphere_default_transformation() {
+        let mut s: Sphere = Default::default();
+        let t = Matrix::get_translation_matrix(2.0, 3.0, 4.0);
+        s.set_transform(t);
+        assert_eq!(s.transform, t);
     }
 }
