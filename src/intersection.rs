@@ -1,7 +1,7 @@
 use crate::Sphere;
 
 // Store data for ray intersection with a object in the scene
-// #[derive(Default)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Intersection {
     pub t: f32,         // At what time hit occured
     pub object: Sphere, // TODO: use dynamic data type
@@ -44,6 +44,24 @@ impl Intersections {
         self.len() == 0
     }
 
+    // Hit is the `intersection` with the lowest non-negative value.
+    // Can be empty as well.
+    pub fn hit(&self) -> Option<Intersection> {
+        let mut result: Option<Intersection> = None;
+        for &intersection in &self.data {
+            if intersection.t > 0.0 {
+                match result {
+                    Some(prev_intersection) => {
+                        if intersection.t < prev_intersection.t {
+                            result = Some(intersection);
+                        }
+                    }
+                    None => result = Some(intersection),
+                }
+            }
+        }
+        result
+    }
 }
 
 // Self has only a vector so abstract out indexing
@@ -95,5 +113,57 @@ mod sphere_tests {
         let xs = s.intersects(r);
         assert_eq!(xs[0].object, s);
         assert_eq!(xs[1].object, s);
+    }
+
+    #[test]
+    fn hit1() {
+        let s: Sphere = Default::default();
+        let i1 = Intersection::new(1.0, s);
+        let i2 = Intersection::new(2.0, s);
+        let mut xs = Intersections::default();
+        xs.push(i2);
+        xs.push(i1);
+        let i = xs.hit();
+        assert_eq!(i.unwrap(), i1);
+    }
+
+    #[test]
+    fn hit2() {
+        let s: Sphere = Default::default();
+        let i1 = Intersection::new(-1.0, s);
+        let i2 = Intersection::new(1.0, s);
+        let mut xs = Intersections::default();
+        xs.push(i2);
+        xs.push(i1);
+        let i = xs.hit();
+        assert_eq!(i.unwrap(), i2);
+    }
+
+    #[test]
+    fn hit3() {
+        let s: Sphere = Default::default();
+        let i1 = Intersection::new(-2.0, s);
+        let i2 = Intersection::new(-1.0, s);
+        let mut xs = Intersections::default();
+        xs.push(i2);
+        xs.push(i1);
+        let i = xs.hit();
+        assert_eq!(i, None);
+    }
+
+    #[test]
+    fn hit4() {
+        let s: Sphere = Default::default();
+        let i1 = Intersection::new(5.0, s);
+        let i2 = Intersection::new(7.0, s);
+        let i3 = Intersection::new(-3.0, s);
+        let i4 = Intersection::new(2.0, s);
+        let mut xs = Intersections::default();
+        xs.push(i1);
+        xs.push(i2);
+        xs.push(i3);
+        xs.push(i4);
+        let i = xs.hit();
+        assert_eq!(i.unwrap(), i4);
     }
 }
