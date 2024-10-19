@@ -1,9 +1,8 @@
-use crate::Compare;
 use crate::Ray;
 use crate::{point, Tuple};
 use crate::{Intersection, Intersections};
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Sphere {
     // TODO: add `id` to it as described in the book
     center: Tuple,
@@ -41,11 +40,11 @@ impl Default for Sphere {
     }
 }
 
-impl PartialEq for Sphere {
-    fn eq(&self, other: &Self) -> bool {
-        self.center == other.center && self.radius.eq(other.radius)
-    }
-}
+// impl PartialEq for Sphere {
+//     fn eq(&self, other: &Self) -> bool {
+//         self.center == other.center && self.radius.eq(other.radius)
+//     }
+// }
 
 #[cfg(test)]
 mod sphere_tests {
