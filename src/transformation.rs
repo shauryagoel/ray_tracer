@@ -10,7 +10,7 @@ impl Matrix {
     }
 
     pub fn get_scaling_matrix(x: f32, y: f32, z: f32) -> Self {
-        let mut transformation_matrix = Matrix::new();
+        let mut transformation_matrix: Matrix = Default::default();
         transformation_matrix[0][0] = x;
         transformation_matrix[1][1] = y;
         transformation_matrix[2][2] = z;

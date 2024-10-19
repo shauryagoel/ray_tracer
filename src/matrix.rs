@@ -12,22 +12,22 @@ pub struct Matrix {
 impl Matrix {
     // Initialize a new matrix with 0's
     pub fn new() -> Self {
-        Self::default()
+        Default::default()
     }
 
     // Initialize identity matrix
     #[allow(non_snake_case)] // For usage of I
     pub fn I() -> Self {
-        let mut identity_matrix = Self::new();
+        let mut identity_matrix: Matrix = Default::default();
         for i in 0..MATRIX_SIZE {
             identity_matrix[i][i] = 1.0;
         }
         identity_matrix
     }
 
-    // Create a copy of input and transposes inplace
+    // Create a copy of input and transpose it
     pub fn transpose(&self) -> Self {
-        let mut result = *self;
+        let mut result = self.clone(); // TODO: fix clippy lint
         for i in 1..MATRIX_SIZE {
             for j in 0..i {
                 (result[i][j], result[j][i]) = (result[j][i], result[i][j]);
@@ -38,7 +38,7 @@ impl Matrix {
 
     // Generate a 3x3 submatrix from the self matrix by removing all the data in `row_ind` row and `col_ind` column
     pub fn submatrix(&self, row_ind: usize, col_ind: usize) -> Matrix3 {
-        let mut result = Matrix3::new();
+        let mut result: Matrix3 = Default::default();
         let mut orig_row_ind: usize = 0;
         for i in 0..result.data.len() {
             if orig_row_ind == row_ind {
@@ -87,7 +87,7 @@ impl Matrix {
         if !self.is_invertible() {
             panic!("Matrix is not invertible");
         }
-        let mut result = Matrix::new();
+        let mut result: Matrix = Default::default();
         for i in 0..MATRIX_SIZE {
             for j in 0..MATRIX_SIZE {
                 result[j][i] = self.cofactor(i, j) / determinant; // Also doing the transpose
@@ -130,7 +130,7 @@ impl std::ops::Mul<Matrix> for Matrix {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
-        let mut result = Matrix::new();
+        let mut result: Matrix = Default::default();
         for i in 0..MATRIX_SIZE {
             for j in 0..MATRIX_SIZE {
                 for k in 0..MATRIX_SIZE {
@@ -174,7 +174,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_init4x4() {
-        let mut m = Matrix::new();
+        let mut m: Matrix = Default::default();
         m[0][0] = 1.0;
         m[0][1] = 2.0;
         m[0][2] = 3.0;
@@ -206,7 +206,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_compare1() {
-        let mut m1 = Matrix::new();
+        let mut m1: Matrix = Default::default();
         m1[0][0] = 1.0;
         m1[0][1] = 2.0;
         m1[0][2] = 3.0;
@@ -227,7 +227,7 @@ mod matrix_tests {
         m1[3][2] = 3.0;
         m1[3][3] = 2.0;
 
-        let mut m2 = Matrix::new();
+        let mut m2: Matrix = Default::default();
         m2[0][0] = 1.0;
         m2[0][1] = 2.0;
         m2[0][2] = 3.0;
@@ -253,7 +253,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_compare2() {
-        let mut m1 = Matrix::new();
+        let mut m1: Matrix = Default::default();
         m1[0][0] = 1.0;
         m1[0][1] = 2.0;
         m1[0][2] = 3.0;
@@ -274,7 +274,7 @@ mod matrix_tests {
         m1[3][2] = 3.0;
         m1[3][3] = 2.0;
 
-        let mut m2 = Matrix::new();
+        let mut m2: Matrix = Default::default();
         m2[0][0] = 2.0;
         m2[0][1] = 3.0;
         m2[0][2] = 4.0;
@@ -300,7 +300,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_multiplication() {
-        let mut m1 = Matrix::new();
+        let mut m1: Matrix = Default::default();
         m1[0][0] = 1.0;
         m1[0][1] = 2.0;
         m1[0][2] = 3.0;
@@ -321,7 +321,7 @@ mod matrix_tests {
         m1[3][2] = 3.0;
         m1[3][3] = 2.0;
 
-        let mut m2 = Matrix::new();
+        let mut m2: Matrix = Default::default();
         m2[0][0] = -2.0;
         m2[0][1] = 1.0;
         m2[0][2] = 2.0;
@@ -342,7 +342,7 @@ mod matrix_tests {
         m2[3][2] = 7.0;
         m2[3][3] = 8.0;
 
-        let mut m3 = Matrix::new();
+        let mut m3: Matrix = Default::default();
         m3[0][0] = 20.0;
         m3[0][1] = 22.0;
         m3[0][2] = 50.0;
@@ -368,7 +368,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_multiplication_with_tuple() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 1.0;
         a[0][1] = 2.0;
         a[0][2] = 3.0;
@@ -397,7 +397,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_multiplication_with_identity() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 0.0;
         a[0][1] = 1.0;
         a[0][2] = 2.0;
@@ -432,7 +432,7 @@ mod matrix_tests {
 
     #[test]
     fn transpose_matrix() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 0.0;
         a[0][1] = 9.0;
         a[0][2] = 3.0;
@@ -453,7 +453,7 @@ mod matrix_tests {
         a[3][2] = 5.0;
         a[3][3] = 8.0;
 
-        let mut b = Matrix::new();
+        let mut b: Matrix = Default::default();
         b[0][0] = 0.0;
         b[0][1] = 9.0;
         b[0][2] = 1.0;
@@ -483,7 +483,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_submatrix() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = -6.0;
         a[0][1] = 1.0;
         a[0][2] = 1.0;
@@ -504,7 +504,7 @@ mod matrix_tests {
         a[3][2] = -1.0;
         a[3][3] = 1.0;
 
-        let mut b = Matrix3::new();
+        let mut b: Matrix3 = Default::default();
         b[0][0] = -6.0;
         b[0][1] = 1.0;
         b[0][2] = 6.0;
@@ -520,7 +520,7 @@ mod matrix_tests {
 
     #[test]
     fn matrix_determinant() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = -2.0;
         a[0][1] = -8.0;
         a[0][2] = 3.0;
@@ -550,7 +550,7 @@ mod matrix_tests {
 
     #[test]
     fn invertible_test1() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 6.0;
         a[0][1] = 4.0;
         a[0][2] = 4.0;
@@ -577,7 +577,7 @@ mod matrix_tests {
 
     #[test]
     fn invertible_test2() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = -4.0;
         a[0][1] = 2.0;
         a[0][2] = -2.0;
@@ -604,7 +604,7 @@ mod matrix_tests {
 
     #[test]
     fn inverse_test1() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = -5.0;
         a[0][1] = 2.0;
         a[0][2] = 6.0;
@@ -627,7 +627,7 @@ mod matrix_tests {
 
         let b = a.inverse();
 
-        let mut _b = Matrix::new();
+        let mut _b: Matrix = Default::default();
         _b[0][0] = 0.21805;
         _b[0][1] = 0.45113;
         _b[0][2] = 0.24060;
@@ -658,7 +658,7 @@ mod matrix_tests {
 
     #[test]
     fn inverse_test2() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 8.0;
         a[0][1] = -5.0;
         a[0][2] = 9.0;
@@ -679,7 +679,7 @@ mod matrix_tests {
         a[3][2] = -9.0;
         a[3][3] = -4.0;
 
-        let mut _a = Matrix::new();
+        let mut _a: Matrix = Default::default();
         _a[0][0] = -0.15385;
         _a[0][1] = -0.15385;
         _a[0][2] = -0.28205;
@@ -705,7 +705,7 @@ mod matrix_tests {
 
     #[test]
     fn inverse_test3() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 9.0;
         a[0][1] = 3.0;
         a[0][2] = 0.0;
@@ -726,7 +726,7 @@ mod matrix_tests {
         a[3][2] = 6.0;
         a[3][3] = 2.0;
 
-        let mut _a = Matrix::new();
+        let mut _a: Matrix = Default::default();
         _a[0][0] = -0.04074;
         _a[0][1] = -0.07778;
         _a[0][2] = 0.14444;
@@ -752,7 +752,7 @@ mod matrix_tests {
 
     #[test]
     fn mulitplication_by_inverse() {
-        let mut a = Matrix::new();
+        let mut a: Matrix = Default::default();
         a[0][0] = 3.0;
         a[0][1] = -9.0;
         a[0][2] = 7.0;
@@ -773,7 +773,7 @@ mod matrix_tests {
         a[3][2] = -1.0;
         a[3][3] = 1.0;
 
-        let mut b = Matrix::new();
+        let mut b: Matrix = Default::default();
         b[0][0] = 8.0;
         b[0][1] = 2.0;
         b[0][2] = 2.0;

@@ -13,7 +13,7 @@ pub struct Matrix3 {
 impl Matrix2 {
     // Initialize a new matrix with 0's
     pub fn new() -> Self {
-        Self::default()
+        Default::default()
     }
 
     pub fn determinant(&self) -> f32 {
@@ -24,12 +24,12 @@ impl Matrix2 {
 impl Matrix3 {
     // Initialize a new matrix with 0's
     pub fn new() -> Self {
-        Self::default()
+        Default::default()
     }
 
     // Generate a 2x2 submatrix from the 3x3 by removing all the data in `row_ind` row and `col_ind` column
     pub fn submatrix(&self, row_ind: usize, col_ind: usize) -> Matrix2 {
-        let mut result = Matrix2::new();
+        let mut result: Matrix2 = Default::default();
         let mut orig_row_ind: usize = 0;
         for i in 0..result.data.len() {
             if orig_row_ind == row_ind {
@@ -104,7 +104,7 @@ impl PartialEq for Matrix2 {
         for row in 0..2 {
             for col in 0..2 {
                 if self.data[row][col].neq(other[row][col]) {
-                    return false;
+                    false;
                 }
             }
         }
@@ -131,7 +131,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix_init2x2() {
-        let mut m = Matrix2::new();
+        let mut m: Matrix2 = Default::default();
         m[0][0] = -3.0;
         m[0][1] = 5.0;
         m[1][0] = 1.0;
@@ -145,7 +145,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix_init3x3() {
-        let mut m = Matrix3::new();
+        let mut m: Matrix3 = Default::default();
         m[0][0] = -3.0;
         m[0][1] = 5.0;
         m[1][0] = 1.0;
@@ -161,7 +161,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix2_determinant() {
-        let mut a = Matrix2::new();
+        let mut a: Matrix2 = Default::default();
         a[0][0] = 1.0;
         a[0][1] = 5.0;
         a[1][0] = -3.0;
@@ -172,7 +172,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix3_submatrix() {
-        let mut a = Matrix3::new();
+        let mut a: Matrix3 = Default::default();
         a[0][0] = 1.0;
         a[0][1] = 5.0;
         a[0][2] = 0.0;
@@ -183,7 +183,7 @@ mod small_matrix_tests {
         a[2][1] = 6.0;
         a[2][2] = -3.0;
 
-        let mut b = Matrix2::new();
+        let mut b: Matrix2 = Default::default();
         b[0][0] = -3.0;
         b[0][1] = 2.0;
         b[1][0] = 0.0;
@@ -194,7 +194,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix3_minor() {
-        let mut a = Matrix3::new();
+        let mut a: Matrix3 = Default::default();
         a[0][0] = 3.0;
         a[0][1] = 5.0;
         a[0][2] = 0.0;
@@ -212,7 +212,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix3_cofactor() {
-        let mut a = Matrix3::new();
+        let mut a: Matrix3 = Default::default();
         a[0][0] = 3.0;
         a[0][1] = 5.0;
         a[0][2] = 0.0;
@@ -231,7 +231,7 @@ mod small_matrix_tests {
 
     #[test]
     fn matrix3_determinant() {
-        let mut a = Matrix3::new();
+        let mut a: Matrix3 = Default::default();
         a[0][0] = 1.0;
         a[0][1] = 2.0;
         a[0][2] = 6.0;

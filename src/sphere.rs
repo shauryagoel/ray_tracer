@@ -22,7 +22,7 @@ impl Sphere {
         let b = 2.0 * ray.direction.dot(&sphere_to_ray);
         let c = sphere_to_ray.dot(&sphere_to_ray) - 1.0;
         let discriminant = b * b - 4.0 * a * c;
-        let mut intersections = Intersections::new();
+        let mut intersections: Intersections = Default::default();
 
         if discriminant >= 0.0 {
             let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
@@ -42,7 +42,7 @@ impl Default for Sphere {
 }
 
 impl PartialEq for Sphere {
-    fn eq(&self, other: &Sphere) -> bool {
+    fn eq(&self, other: &Self) -> bool {
         self.center == other.center && self.radius.eq(other.radius)
     }
 }
@@ -55,7 +55,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection1() {
         let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, 4.0);
@@ -65,7 +65,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection2() {
         let r = Ray::new(point(0.0, 1.0, -5.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, 5.0);
@@ -75,7 +75,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection3() {
         let r = Ray::new(point(0.0, 2.0, -5.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 0);
     }
@@ -83,7 +83,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection_ray_origin_inside_sphere() {
         let r = Ray::new(point(0.0, 0.0, 0.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, -1.0);
@@ -93,7 +93,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection_before_ray_origin() {
         let r = Ray::new(point(0.0, 0.0, 5.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].t, -6.0);
@@ -103,7 +103,7 @@ mod sphere_tests {
     #[test]
     fn sphere_ray_intersection_object_property() {
         let r = Ray::new(point(0.0, 0.0, -5.0), vector(0.0, 0.0, 1.0));
-        let s = Sphere::default();
+        let s: Sphere = Default::default();
         let xs = s.intersects(r);
         assert_eq!(xs.len(), 2);
         assert_eq!(xs[0].object, Sphere::default());
