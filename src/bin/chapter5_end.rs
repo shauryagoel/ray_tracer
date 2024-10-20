@@ -1,4 +1,5 @@
 use ray_tracer::{point, Canvas, Color, Ray, Sphere};
+// use std::f32::consts::PI;
 
 // Cast a shadow of a sphere on a canvas located at `canvas_z` parallel to the `xy` axis
 // Ray is cast from the +ve z coordinate towards the canvas
@@ -12,6 +13,15 @@ fn main() {
 
     let mut canvas = Canvas::new(canvas_size, canvas_size);
     let s: Sphere = Default::default();
+    // s.set_transform(Matrix::get_scaling_matrix(1.0, 0.5, 1.0));
+    // s.set_transform(Matrix::get_scaling_matrix(0.5, 1.0, 1.0));
+    // s.set_transform(
+    //     Matrix::get_rotation_z_matrix(PI / 4.0) * Matrix::get_scaling_matrix(0.5, 1.0, 1.0),
+    // );
+    // s.set_transform(
+    //     Matrix::get_shearing_matrix(1.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+    //         * Matrix::get_scaling_matrix(0.5, 1.0, 1.0),
+    // );
 
     let half_width: i32 = (canvas_size as i32) / 2;
     for x in -half_width..half_width {
