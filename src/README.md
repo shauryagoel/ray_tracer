@@ -10,6 +10,8 @@ $w = 1$ for a point
 
 $w = 0$ for a vector
 
+Thus, subtracting two points gives a vector.
+
 ## Chapter 4
 
 We can create transformation matrices to **translate**, **scale** and **rotate** points and vectors.
@@ -54,6 +56,7 @@ $$
 ### Rotation
 
 We can rotate a point or a point around *x*, *y* or *z* axis by a particular value of radians.
+Point moves towards the direction of the fingers in the left-hand thumb rule, thumb points towards the positive side of the axis of the rotation.
 
 $$ radians(deg) = \frac{deg}{180} \pi $$
 
@@ -110,7 +113,7 @@ $$
 ### Transforming ray and spheres
 
 Until now our sphere is always at origin and is of radius 1. To compute intersections of other sphere locations and sizes, we need to change our intersection algorithm. To prevent doing so, we can transform the ray itself assuming the sphere is the default one.
-The transformations which moves the default sphere to interesting locations and sizes, we can apply the inverse translation to the ray.
+The transformations which moves the default sphere to interesting locations and sizes, we can apply the inverse of that to both of the ray's components.
 
 Another way to think it is that transformations converts points between two coordinate systems-
 
@@ -129,3 +132,25 @@ When *P* is the point where our ray intersects an object, there are four vectors
 4) *R* is the *reflection vector* pointing in the direction that incoming light would bounce or reflect.
 
 **Surface normal** is a vector perpendicular to the surface at a given point. It is a normalized vector.
+
+### Transforming normals
+
+After finding the normal to a point in object space, we need to transform it to the world space for it to be useful.
+Multiplying it by the sphere transformation matrix will not work as it will not be perpendicular to the surface anymore.
+To make it perpendicular again, we need to multiply it by the inverse transpose of the transformation matrix.
+
+Derivation:
+[Link](https://www.scratchapixel.com/lessons/mathematics-physics-for-computer-graphics/geometry/transforming-normals.html)
+
+Summary of the above derivation-
+
+Let $M$ be the transformation matrix of the sphere and $n$ be the normal vector and $v$ be the tangent to the normal.
+
+$$ n^{T}*v = 0 $$
+$$ n^{T} * M^{-1} * M * v = 0 $$
+$$ (M^{-1T} * n)^{T} * (M * v) = 0 $$
+$$ n'^{T} * v' = 0 $$
+
+Where $n' = M^{-1T} * n$ and $v' = M * v$.
+
+This means that, transforming a point on the surface of the sphere by $M$ and transforming the normal by $M^{-1T}$ will make the normal perpendicular to the surface in the world space.

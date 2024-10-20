@@ -45,9 +45,16 @@ impl Sphere {
         self.transform = t;
     }
 
-    // Find normal of the sphere at point `p`
+    // Find normal of the sphere at world point `p`
+    // Basically transform the point to the object space, find normal at that point
+    // and then, transform it back to the world space
+    // Derivation is given in the chapter 6 README
     pub fn normal_at(&self, p: Tuple) -> Tuple {
-        (p - point(0.0, 0.0, 0.0)).normalize()
+        let object_point = self.transform.inverse() * p;
+        let object_normal = object_point - point(0.0, 0.0, 0.0);
+        let mut world_normal = self.transform.inverse().transpose() * object_normal;
+        world_normal.w = 0.0;
+        world_normal.normalize()
     }
 }
 
@@ -68,6 +75,7 @@ impl Default for Sphere {
 mod sphere_tests {
     use super::*;
     use crate::vector;
+    use std::f32::consts::{FRAC_1_SQRT_2, PI};
 
     #[test]
     fn sphere_ray_intersection1() {
@@ -196,5 +204,23 @@ mod sphere_tests {
         let val: f32 = f32::sqrt(3.0) / 3.0;
         let n = s.normal_at(point(val, val, val));
         assert_eq!(n, n.normalize());
+    }
+
+    #[test]
+    fn sphere_normal_of_translated_sphere() {
+        let mut s: Sphere = Default::default();
+        s.set_transform(Matrix::get_translation_matrix(0.0, 1.0, 0.0));
+        let n = s.normal_at(point(0.0, 1.0 + FRAC_1_SQRT_2, -FRAC_1_SQRT_2));
+        assert_eq!(n, vector(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2));
+    }
+
+    #[test]
+    fn sphere_normal_of_tranformed_sphere() {
+        let mut s: Sphere = Default::default();
+        s.set_transform(
+            Matrix::get_scaling_matrix(1.0, 0.5, 1.0) * Matrix::get_rotation_z_matrix(PI / 5.0),
+        );
+        let n = s.normal_at(point(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2));
+        assert_eq!(n, vector(0.0, 0.97014, -0.24254));
     }
 }
