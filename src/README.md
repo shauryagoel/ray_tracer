@@ -118,3 +118,14 @@ Another way to think it is that transformations converts points between two coor
 2) At the object level, everything is in *object space coordinates* relative to the object itself. Like default sphere being at origin and of radius 1.
 
 Now, to intersect a ray in world space with a sphere in object space, we just convert the ray's origin and direction to that same object space.
+
+## Chapter 6
+
+When *P* is the point where our ray intersects an object, there are four vectors defined-
+
+1) *E* is the *eye vector* pointing from *P* to the origin of the ray (usually where the eye exists that is looking at the scene).
+2) *L* is the *light vector* pointing from *P* to the position of the light source.
+3) *N* is the *surface normal*, vector that is perpendicular to the surface at *P*.
+4) *R* is the *reflection vector* pointing in the direction that incoming light would bounce or reflect.
+
+**Surface normal** is a vector perpendicular to the surface at a given point. It is a normalized vector.
