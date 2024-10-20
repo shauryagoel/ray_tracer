@@ -44,6 +44,11 @@ impl Sphere {
     pub fn set_transform(&mut self, t: Matrix) {
         self.transform = t;
     }
+
+    // Find normal of the sphere at point `p`
+    pub fn normal_at(&self, p: Tuple) -> Tuple {
+        (p - point(0.0, 0.0, 0.0)).normalize()
+    }
 }
 
 impl Default for Sphere {
@@ -154,5 +159,42 @@ mod sphere_tests {
         s.set_transform(Matrix::get_translation_matrix(5.0, 0.0, 0.0));
         let xs = s.intersect(r);
         assert_eq!(xs.len(), 0);
+    }
+
+    #[test]
+    fn sphere_normal_at_x_axis() {
+        let s: Sphere = Default::default();
+        let n = s.normal_at(point(1.0, 0.0, 0.0));
+        assert_eq!(n, vector(1.0, 0.0, 0.0));
+    }
+
+    #[test]
+    fn sphere_normal_at_y_axis() {
+        let s: Sphere = Default::default();
+        let n = s.normal_at(point(0.0, 1.0, 0.0));
+        assert_eq!(n, vector(0.0, 1.0, 0.0));
+    }
+
+    #[test]
+    fn sphere_normal_at_z_axis() {
+        let s: Sphere = Default::default();
+        let n = s.normal_at(point(0.0, 0.0, 1.0));
+        assert_eq!(n, vector(0.0, 0.0, 1.0));
+    }
+
+    #[test]
+    fn sphere_normal_at_non_axial_point() {
+        let s: Sphere = Default::default();
+        let val: f32 = f32::sqrt(3.0) / 3.0;
+        let n = s.normal_at(point(val, val, val));
+        assert_eq!(n, vector(val, val, val));
+    }
+
+    #[test]
+    fn sphere_normal_is_normalized() {
+        let s: Sphere = Default::default();
+        let val: f32 = f32::sqrt(3.0) / 3.0;
+        let n = s.normal_at(point(val, val, val));
+        assert_eq!(n, n.normalize());
     }
 }
