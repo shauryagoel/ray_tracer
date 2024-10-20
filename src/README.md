@@ -10,6 +10,8 @@ $w = 1$ for a point
 
 $w = 0$ for a vector
 
+Thus, subtracting two points gives a vector.
+
 ## Chapter 4
 
 We can create transformation matrices to **translate**, **scale** and **rotate** points and vectors.
@@ -54,6 +56,7 @@ $$
 ### Rotation
 
 We can rotate a point or a point around *x*, *y* or *z* axis by a particular value of radians.
+Point moves towards the direction of the fingers in the left-hand thumb rule, thumb points towards the positive side of the axis of the rotation.
 
 $$ radians(deg) = \frac{deg}{180} \pi $$
 
@@ -110,7 +113,7 @@ $$
 ### Transforming ray and spheres
 
 Until now our sphere is always at origin and is of radius 1. To compute intersections of other sphere locations and sizes, we need to change our intersection algorithm. To prevent doing so, we can transform the ray itself assuming the sphere is the default one.
-The transformations which moves the default sphere to interesting locations and sizes, we can apply the inverse translation to the ray.
+The transformations which moves the default sphere to interesting locations and sizes, we can apply the inverse of that to both of the ray's components.
 
 Another way to think it is that transformations converts points between two coordinate systems-
 
