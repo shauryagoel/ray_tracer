@@ -1,7 +1,7 @@
 use crate::{Color, Tuple};
 
 // A point light with no size, existing at a single point in space with a given intensity.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Light {
     pub position: Tuple,
     pub intensity: Color,

@@ -11,6 +11,7 @@ mod sphere;
 mod transformation;
 mod tuple;
 mod utils;
+mod world;
 
 pub use canvas::Canvas;
 pub use color::Color;

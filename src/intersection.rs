@@ -40,6 +40,17 @@ impl Intersections {
         self.data.len()
     }
 
+    // Append one Intersection object with the other
+    // Basically, append the data vector of both
+    pub fn extend(&mut self, b: Intersections) {
+        self.data.extend(b.data);
+    }
+
+    // Sort the Intersections based on increasing `t` value
+    pub fn sort(&mut self) {
+        self.data.sort_by(|a, b| a.t.partial_cmp(&b.t).unwrap());
+    }
+
     pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
