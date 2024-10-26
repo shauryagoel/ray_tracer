@@ -159,3 +159,11 @@ This means that, transforming a point on the surface of the sphere by $M$ and tr
 
 Vector reflection is the process of finding the direction of a vector after it bounces off a surface.
 Derivation Link: [Link](https://www.bluebill.net/vector_reflection.html).
+
+### The Phong Reflection Model
+
+An algorithm to simulate the way light interacts with surfaces. It has three different types of lighting-
+
+1) **Ambient reflection**- light reflected from other objects in the environment. This model treats this as a constant, coloring all points equally.
+2) **Diffuse reflection**- light reflected from a surface. It depends only on the angle between the light vector and the surface normal.
+3) **Specular reflection**- is the reflection of the light source itself and results in **specular highlight** (the bright spot on a curved surface). It depends on only on the angle between the reflection vector and the eye vector and is controlled by a parameter called **shininess**. Higher the shininess, the smaller and tighter the specular highlight.

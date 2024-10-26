@@ -1,3 +1,4 @@
+use crate::Material;
 use crate::Ray;
 use crate::{point, Matrix, Tuple};
 use crate::{Intersection, Intersections};
@@ -7,15 +8,17 @@ pub struct Sphere {
     // TODO: add `id` to it as described in the book
     center: Tuple,
     radius: f32,
-    transform: Matrix, // Transformation matrix
+    transform: Matrix,  // Transformation matrix
+    material: Material, // Material of the sphere
 }
 
 impl Sphere {
-    pub fn new(center: Tuple, radius: f32, transform: Matrix) -> Self {
+    pub fn new(center: Tuple, radius: f32, transform: Matrix, material: Material) -> Self {
         Self {
             center,
             radius,
             transform,
+            material,
         }
     }
 
@@ -59,9 +62,9 @@ impl Sphere {
 }
 
 impl Default for Sphere {
-    // Create a sphere centered at origin, of radius 1 and with identity transformation matrix
+    // Create a sphere centered at origin, of radius 1, with identity transformation matrix and with default material
     fn default() -> Self {
-        Self::new(point(0.0, 0.0, 0.0), 1.0, Matrix::I())
+        Self::new(point(0.0, 0.0, 0.0), 1.0, Matrix::I(), Material::default())
     }
 }
 
@@ -222,5 +225,23 @@ mod sphere_tests {
         );
         let n = s.normal_at(point(0.0, FRAC_1_SQRT_2, -FRAC_1_SQRT_2));
         assert_eq!(n, vector(0.0, 0.97014, -0.24254));
+    }
+
+    #[test]
+    fn sphere_default_material() {
+        let s: Sphere = Default::default();
+        let m: Material = Default::default();
+        assert_eq!(s.material, m);
+    }
+
+    #[test]
+    fn sphere_assigned_material() {
+        let mut s: Sphere = Default::default();
+        let m = Material {
+            ambient: 1.0,
+            ..Default::default()
+        };
+        s.material = m;
+        assert_eq!(s.material, m);
     }
 }
