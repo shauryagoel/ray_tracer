@@ -9,7 +9,7 @@ pub struct Sphere {
     center: Tuple,
     radius: f32,
     transform: Matrix,  // Transformation matrix
-    material: Material, // Material of the sphere
+    pub material: Material, // Material of the sphere
 }
 
 impl Sphere {

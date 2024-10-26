@@ -22,9 +22,9 @@ impl Material {
     }
 
     // Phong reflection model for shading
-    pub fn lighting(&self, light: Light, point: Tuple, eyev: Tuple, normalv: Tuple) -> Color {
+    pub fn lighting(&self, light: Light, hit_point: Tuple, eyev: Tuple, normalv: Tuple) -> Color {
         let effective_color = self.color * light.intensity;
-        let lightv = (light.position - point).normalize();
+        let lightv = (light.position - hit_point).normalize();
         let ambient = effective_color * self.ambient;
         let mut diffuse = Color::black();
         let mut specular = Color::black();

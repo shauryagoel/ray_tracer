@@ -1,6 +1,6 @@
 use crate::{Matrix, Tuple};
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug)]
 pub struct Ray {
     pub origin: Tuple,    // Is a point
     pub direction: Tuple, // Is a vector
@@ -40,7 +40,7 @@ mod ray_tests {
     }
 
     #[test]
-    fn comuting_position_with_time() {
+    fn computing_position_with_time() {
         let origin = point(2.0, 3.0, 4.0);
         let direction = vector(1.0, 0.0, 0.0);
         let ray = Ray::new(origin, direction);
