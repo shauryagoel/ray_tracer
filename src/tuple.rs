@@ -54,6 +54,12 @@ impl Tuple {
             0.0, // It still is a vector
         )
     }
+
+    // Reflection vector of a vector with respect to a normal
+    // For derivation, see the chapter 6 README.md
+    pub fn reflect(&self, normal: &Self) -> Self {
+        *self - *normal * 2.0 * self.dot(normal)
+    }
 }
 
 impl PartialEq for Tuple {
@@ -107,6 +113,15 @@ impl std::ops::Mul<f32> for Tuple {
     }
 }
 
+// For scalar * tuple
+impl std::ops::Mul<Tuple> for f32 {
+    type Output = Tuple;
+
+    fn mul(self, a: Tuple) -> Tuple {
+        Tuple::new(a.x * self, a.y * self, a.z * self, a.w * self)
+    }
+}
+
 // For tuple / scalar
 impl std::ops::Div<f32> for Tuple {
     type Output = Self;
@@ -119,6 +134,7 @@ impl std::ops::Div<f32> for Tuple {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::f32::consts::FRAC_1_SQRT_2;
 
     #[test]
     fn point_validity() {
@@ -290,5 +306,21 @@ mod tests {
         let _v = vector(-1.0, 2.0, -1.0);
         assert_eq!(a.cross(&b), _v);
         assert_eq!(b.cross(&a), -_v);
+    }
+
+    #[test]
+    fn reflecting_at_y_axis() {
+        let v = vector(1.0, -1.0, 0.0);
+        let n = vector(0.0, 1.0, 0.0);
+        let r = v.reflect(&n);
+        assert_eq!(r, vector(1.0, 1.0, 0.0));
+    }
+
+    #[test]
+    fn reflecting_at_slanted_surface() {
+        let v = vector(0.0, -1.0, 0.0);
+        let n = vector(FRAC_1_SQRT_2, FRAC_1_SQRT_2, 0.0);
+        let r = v.reflect(&n);
+        assert_eq!(r, vector(1.0, 0.0, 0.0));
     }
 }

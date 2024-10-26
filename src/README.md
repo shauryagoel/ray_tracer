@@ -154,3 +154,8 @@ $$ n'^{T} * v' = 0 $$
 Where $n' = M^{-1T} * n$ and $v' = M * v$.
 
 This means that, transforming a point on the surface of the sphere by $M$ and transforming the normal by $M^{-1T}$ will make the normal perpendicular to the surface in the world space.
+
+### Reflecting vectors
+
+Vector reflection is the process of finding the direction of a vector after it bounces off a surface.
+Derivation Link: [Link](https://www.bluebill.net/vector_reflection.html).
