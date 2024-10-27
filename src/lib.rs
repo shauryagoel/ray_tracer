@@ -15,7 +15,7 @@ mod world;
 
 pub use canvas::Canvas;
 pub use color::Color;
-pub use intersection::{Intersection, Intersections};
+pub use intersection::{Computation, Intersection, Intersections};
 pub use light::Light;
 pub use material::Material;
 pub use matrix::Matrix;
@@ -25,3 +25,5 @@ pub use ray::Ray;
 pub use sphere::Sphere;
 pub use tuple::{point, vector, Tuple};
 pub use utils::Compare;
+pub use world::World;
+
