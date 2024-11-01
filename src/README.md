@@ -2,6 +2,23 @@
 
 Summarize important concepts from the book.
 
+<!-- toc -->
+
+- [Chapter 1](#chapter-1)
+- [Chapter 4](#chapter-4)
+  * [Translate](#translate)
+  * [Scaling](#scaling)
+  * [Rotation](#rotation)
+  * [Shearing](#shearing)
+- [Chapter 5](#chapter-5)
+  * [Transforming ray and spheres](#transforming-ray-and-spheres)
+- [Chapter 6](#chapter-6)
+  * [Transforming normals](#transforming-normals)
+  * [Reflecting vectors](#reflecting-vectors)
+  * [The Phong Reflection Model](#the-phong-reflection-model)
+
+<!-- tocstop -->
+
 ## Chapter 1
 
 Each tuple has 4 components- *x*, *y*, *z* and *w*.
