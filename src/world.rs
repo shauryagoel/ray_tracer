@@ -28,7 +28,7 @@ impl World {
         comps
             .object
             .material
-            .lighting(self.light, comps.point, comps.eyev, comps.normalv)
+            .lighting(self.light, comps.point, comps.eyev, comps.normalv, false)
     }
 
     // Get the color at the intersection point of the ray

@@ -43,7 +43,7 @@ fn main() {
                 let calculated_color =
                     hit.object
                         .material
-                        .lighting(light, hit_point, eye_vector, point_normal);
+                        .lighting(light, hit_point, eye_vector, point_normal, false);
 
                 // Translate with respect to cavas coordinate space
                 let translated_x = (x + half_width) as usize;
