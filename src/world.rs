@@ -6,7 +6,7 @@ use crate::{point, Color};
 use crate::{Computation, Intersections};
 
 pub struct World {
-    light: Light,
+    pub light: Light,
     pub objects: Vec<Sphere>,
 }
 

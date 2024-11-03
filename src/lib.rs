@@ -14,6 +14,8 @@ mod tuple;
 mod utils;
 mod world;
 
+// Use in chapter end exercises
+pub use camera::Camera;
 pub use canvas::Canvas;
 pub use color::Color;
 pub use intersection::{Computation, Intersection, Intersections};

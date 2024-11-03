@@ -7,15 +7,15 @@ use crate::World;
 // Lets us take pictures of the scene
 // Main responsibility is to map the 3D scene to a 2D canvas, by projecting rays through the camera to the canvas
 // The camera's canvas will always be exactly one unit in front of the camera
-struct Camera {
-    hsize: u16,         // Horizontal size in pixels of the canvas
-    vsize: u16,         // Vertical size in pixels of the canvas
-    field_of_view: f32, // An angle that describes how much the camera can see
-    transform: Matrix, // Transformation matrix that describes how the world is moved relative to the camera (is a view transform)
-    aspect: f32,       // Ascpect ratio of the canvas
-    half_width: f32,   // Just half of the width of the canvas
-    half_height: f32,  // Just half of the height of the canvas
-    pixel_size: f32,   // Size of a single pixel
+pub struct Camera {
+    hsize: u16,            // Horizontal size in pixels of the canvas
+    vsize: u16,            // Vertical size in pixels of the canvas
+    field_of_view: f32,    // An angle that describes how much the camera can see
+    pub transform: Matrix, // Transformation matrix that describes how the world is moved relative to the camera (is a view transform)
+    aspect: f32,           // Ascpect ratio of the canvas
+    half_width: f32,       // Just half of the width of the canvas
+    half_height: f32,      // Just half of the height of the canvas
+    pixel_size: f32,       // Size of a single pixel
 }
 
 impl Camera {
