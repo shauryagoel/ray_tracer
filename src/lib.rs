@@ -1,3 +1,4 @@
+mod camera;
 mod canvas;
 mod color;
 mod intersection;
@@ -26,4 +27,3 @@ pub use sphere::Sphere;
 pub use tuple::{point, vector, Tuple};
 pub use utils::Compare;
 pub use world::World;
-

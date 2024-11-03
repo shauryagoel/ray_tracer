@@ -16,6 +16,7 @@ Summarize important concepts from the book.
   * [Transforming normals](#transforming-normals)
   * [Reflecting vectors](#reflecting-vectors)
   * [The Phong Reflection Model](#the-phong-reflection-model)
+- [Chapter 7](#chapter-7)
 
 <!-- tocstop -->
 
@@ -186,3 +187,9 @@ An algorithm to simulate the way light interacts with surfaces. It has three dif
 3) **Specular reflection**- is the reflection of the light source itself and results in **specular highlight** (the bright spot on a curved surface). It depends only on the angle between the reflection vector and the eye vector and is controlled by a parameter called **shininess**. Higher the shininess, the smaller and tighter the specular highlight.
 
 It is basically the sum of these three reflection components.
+
+## Chapter 7
+
+**View Transformation** is a transformation matrix that orients the world relative to the eye.
+
+It is easier to imagine that it moves the eyes not the world.

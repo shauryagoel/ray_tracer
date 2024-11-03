@@ -6,7 +6,7 @@ const MATRIX_SIZE: usize = 4;
 
 #[derive(Copy, Clone, Debug, Default)]
 pub struct Matrix {
-    pub data: [[f32; MATRIX_SIZE]; MATRIX_SIZE],
+    data: [[f32; MATRIX_SIZE]; MATRIX_SIZE], // TODO: create this into 1D array to increase performance
 }
 
 impl Matrix {

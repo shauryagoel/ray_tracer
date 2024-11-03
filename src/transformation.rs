@@ -1,4 +1,5 @@
 use crate::Matrix;
+use crate::Tuple;
 
 impl Matrix {
     pub fn get_translation_matrix(x: f32, y: f32, z: f32) -> Self {
@@ -57,6 +58,28 @@ impl Matrix {
         transformation_matrix[2][0] = zx;
         transformation_matrix[2][1] = zy;
         transformation_matrix
+    }
+
+    /// Compute the view transform matrix to move the eye
+    ///
+    /// * `from`: position where the eye is
+    /// * `to`: the point to look at
+    /// * `up`: vector indicating the up direction
+    pub fn get_view_transform(from: Tuple, to: Tuple, up: Tuple) -> Matrix {
+        let forward = (to - from).normalize();
+        let left = forward.cross(&up.normalize());
+        let true_up = left.cross(&forward);
+        let mut orientation = Matrix::I();
+        orientation[0][0] = left.x;
+        orientation[0][1] = left.y;
+        orientation[0][2] = left.z;
+        orientation[1][0] = true_up.x;
+        orientation[1][1] = true_up.y;
+        orientation[1][2] = true_up.z;
+        orientation[2][0] = -forward.x;
+        orientation[2][1] = -forward.y;
+        orientation[2][2] = -forward.z;
+        orientation * Matrix::get_translation_matrix(-from.x, -from.y, -from.z)
     }
 }
 
@@ -251,5 +274,53 @@ mod transformation_tests {
         let T = C * B * A;
 
         assert_eq!(T * p, point(15.0, 0.0, 7.0));
+    }
+
+    #[test]
+    fn default_view_transform() {
+        let from = point(0.0, 0.0, 0.0);
+        let to = point(0.0, 0.0, -1.0);
+        let up = vector(0.0, 1.0, 0.0);
+        let t = Matrix::get_view_transform(from, to, up);
+        assert_eq!(t, Matrix::I());
+    }
+
+    #[test]
+    fn view_transform_looking_in_positive_z_direction() {
+        let from = point(0.0, 0.0, 0.0);
+        let to = point(0.0, 0.0, 1.0);
+        let up = vector(0.0, 1.0, 0.0);
+        let t = Matrix::get_view_transform(from, to, up);
+        assert_eq!(t, Matrix::get_scaling_matrix(-1.0, 1.0, -1.0));
+    }
+
+    #[test]
+    fn view_transform_moves_world() {
+        let from = point(0.0, 0.0, 8.0);
+        let to = point(0.0, 0.0, 0.0);
+        let up = vector(0.0, 1.0, 0.0);
+        let t = Matrix::get_view_transform(from, to, up);
+        assert_eq!(t, Matrix::get_translation_matrix(0.0, 0.0, -8.0));
+    }
+
+    #[test]
+    fn view_transform_arbitrary() {
+        let from = point(1.0, 3.0, 2.0);
+        let to = point(4.0, -2.0, 8.0);
+        let up = vector(1.0, 1.0, 0.0);
+        let t = Matrix::get_view_transform(from, to, up);
+        let mut tm = Matrix::I();
+        tm[0][0] = -0.50709;
+        tm[0][1] = 0.50709;
+        tm[0][2] = 0.67612;
+        tm[0][3] = -2.36643;
+        tm[1][0] = 0.76772;
+        tm[1][1] = 0.60609;
+        tm[1][2] = 0.12122;
+        tm[1][3] = -2.82843;
+        tm[2][0] = -0.35857;
+        tm[2][1] = 0.59761;
+        tm[2][2] = -0.71714;
+        assert_eq!(t, tm);
     }
 }
